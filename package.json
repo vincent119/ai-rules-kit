@@ -1,0 +1,28 @@
+{
+  "name": "@vincent119/ai-rules-kit",
+  "version": "2.0.0",
+  "description": "AI coding rules and skills installer for Copilot, Cursor, Claude Code, Kiro, Antigravity",
+  "keywords": ["copilot", "cursor", "claude-code", "kiro", "antigravity", "ai-coding", "golang", "copilot-rules"],
+  "author": "vincent119",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vincent119/ai-rules-kit.git"
+  },
+  "bin": {
+    "ai-rules-kit": "./cli/install.js"
+  },
+  "files": [
+    "source/",
+    "skills/",
+    "cli/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

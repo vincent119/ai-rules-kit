@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+.kiro/
+.agent/
+*.swp
+*.swo
+
+# Build
+dist/
+build/
+
+# Temp
+*.tmp
+*.bak
+*~
