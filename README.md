@@ -25,7 +25,7 @@
 
 - 支援 5 種主流 AI IDE，一套規範多處部署
 - 涵蓋 9 種程式語言的編碼規範
-- 內建 36 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps 等
+- 內建 37 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps 等
 - 自動產生各 IDE 所需的 frontmatter 格式
 - 支援專案層級與使用者層級（全域）安裝
 - 提供 `--dry-run` 預覽模式，安裝前可確認寫入路徑
@@ -148,6 +148,7 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 | `changelog-generator` | Changelog 產生器：Git commits 轉換為 Release Notes，自動分類與過濾 |
 | `test-coverage` | 測試覆蓋率報告：支援 Go、Python、Node.js 專案 |
 | `skill-creator` | Skill 建立指南：建立或更新 Skills 的最佳實務 |
+| `meeting-transcriber` | 會議錄音轉錄：透過 whisper.cpp 將音訊/視訊轉為文字，生成結構化會議紀要與工作日報 |
 
 ## CLI 參考
 
@@ -290,7 +291,7 @@ ai-rules-kit/
 │   ├── go-grpc/
 │   ├── rust-error-handling/
 │   ├── sre-vpc-architecture/
-│   └── ...（共 36 個）
+│   └── ...（共 37 個）
 ├── package.json
 ├── LICENSE
 └── README.md
