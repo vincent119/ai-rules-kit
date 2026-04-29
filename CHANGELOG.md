@@ -4,8 +4,15 @@
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-04-29
+
 ### ✨ Added
+- 新增 GitHub Copilot Skills 安裝支援（專案層級 `.github/skills/`、使用者層級 `~/.copilot/skills/`）
 - 新增 `git-repo-init` Skill：掃描目錄偵測語言與工具，自動產生 .gitignore、LICENSE、README.md 等初始化檔案
+
+### 📝 Changed
+- 更新 README.md：Skills 支援 IDE 從 2 個增加為 3 個（Copilot、Kiro、Antigravity）
+- 更新 Skills 總數為 38 個
 
 ## [1.0.1] - 2026-04-21
 

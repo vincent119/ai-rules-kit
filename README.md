@@ -25,7 +25,7 @@
 
 - 支援 5 種主流 AI IDE，一套規範多處部署
 - 涵蓋 9 種程式語言的編碼規範
-- 內建 37 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps 等
+- 內建 38 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps 等
 - 自動產生各 IDE 所需的 frontmatter 格式
 - 支援專案層級與使用者層級（全域）安裝
 - 提供 `--dry-run` 預覽模式，安裝前可確認寫入路徑
@@ -55,13 +55,13 @@ npx @vincent119/ai-rules-kit --copilot --global
 
 | 旗標 | IDE | Skills 支援 |
 |------|-----|:-----------:|
-| `--copilot` / `--vscode` | GitHub Copilot (VS Code / JetBrains) | - |
+| `--copilot` / `--vscode` | GitHub Copilot (VS Code / JetBrains) | O |
 | `--cursor` | Cursor | - |
 | `--claude` | Claude Code | - |
 | `--kiro` | Kiro | O |
 | `--antigravity` | Antigravity (Google) | O |
 
-Skills 僅在 Kiro 與 Antigravity 中支援，其他 IDE 僅安裝語言規範與全域規範。
+Skills 在 Copilot、Kiro 與 Antigravity 中支援，其他 IDE 僅安裝語言規範與全域規範。
 
 ## 語言規範
 
@@ -146,6 +146,7 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 | `ui-component-guidelines` | 元件設計規範：按鈕狀態、表單驗證、Modal 行為、Toast 通知、表格互動、載入狀態 |
 | `ui-design-tokens` | Design Token 管理：三層 token 架構、CSS 變數組織、Light/Dark 主題切換 |
 | `changelog-generator` | Changelog 產生器：Git commits 轉換為 Release Notes，自動分類與過濾 |
+| `git-repo-init` | Git Repo 初始化：掃描目錄偵測語言與工具，自動產生 .gitignore、LICENSE、README.md、.editorconfig |
 | `test-coverage` | 測試覆蓋率報告：支援 Go、Python、Node.js 專案 |
 | `skill-creator` | Skill 建立指南：建立或更新 Skills 的最佳實務 |
 | `meeting-transcriber` | 會議錄音轉錄：透過 whisper.cpp 將音訊/視訊轉為文字，生成結構化會議紀要與工作日報 |
@@ -203,7 +204,7 @@ npx @vincent119/ai-rules-kit --<ide> [options]
 
 | IDE | 全域規範 | 語言規範 | Skills |
 |-----|---------|---------|--------|
-| Copilot | `.github/copilot-instructions.md` | `.github/instructions/<lang>.instructions.md` | - |
+| Copilot | `.github/copilot-instructions.md` | `.github/instructions/<lang>.instructions.md` | `.github/skills/<name>/` |
 | Cursor | - | `.cursor/rules/<lang>.mdc` | - |
 | Claude Code | `CLAUDE.md` | `.claude/rules/<lang>.md` | - |
 | Kiro | - | `.kiro/steering/<lang>.md` | `.kiro/skills/<name>/` |
@@ -213,7 +214,7 @@ npx @vincent119/ai-rules-kit --<ide> [options]
 
 | IDE | 全域規範 | 語言規範 | Skills |
 |-----|---------|---------|--------|
-| Copilot | - | `~/.copilot/instructions/<lang>.instructions.md` | - |
+| Copilot | - | `~/.copilot/instructions/<lang>.instructions.md` | `~/.copilot/skills/<name>/` |
 | Cursor | - | `~/.cursor/rules/<lang>.mdc` | - |
 | Claude Code | `~/.claude/CLAUDE.md` | `~/.claude/rules/<lang>.md` | - |
 | Kiro | - | `~/.kiro/steering/<lang>.md` | `~/.kiro/skills/<name>/` |
@@ -291,7 +292,7 @@ ai-rules-kit/
 │   ├── go-grpc/
 │   ├── rust-error-handling/
 │   ├── sre-vpc-architecture/
-│   └── ...（共 37 個）
+│   └── ...（共 38 個）
 ├── package.json
 ├── LICENSE
 └── README.md

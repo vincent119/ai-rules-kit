@@ -11,10 +11,12 @@ const IDE_CONFIG = {
     project: {
       global: '.github/copilot-instructions.md',
       rules: '.github/instructions',
+      skills: '.github/skills',
       ext: '.instructions.md',
     },
     user: {
       rules: path.join(os.homedir(), '.copilot', 'instructions'),
+      skills: path.join(os.homedir(), '.copilot', 'skills'),
       ext: '.instructions.md',
     },
   },
