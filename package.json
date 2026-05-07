@@ -1,6 +1,6 @@
 {
   "name": "@vincent119/ai-rules-kit",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "AI coding rules and skills installer for Copilot, Cursor, Claude Code, Kiro, Antigravity",
   "keywords": ["copilot", "cursor", "claude-code", "kiro", "antigravity", "ai-coding", "golang", "copilot-rules"],
   "author": "vincent119",

@@ -25,7 +25,7 @@
 
 - 支援 5 種主流 AI IDE，一套規範多處部署
 - 涵蓋 9 種程式語言的編碼規範
-- 內建 50 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps 等
+- 內建 51 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps、Financial 等
 - 自動產生各 IDE 所需的 frontmatter 格式
 - 支援專案層級與使用者層級（全域）安裝
 - 提供 `--dry-run` 預覽模式，安裝前可確認寫入路徑
@@ -87,6 +87,12 @@ Skills 在 Copilot、Kiro 與 Antigravity 中支援，其他 IDE 僅安裝語言
 Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 context 限制）與 `extended`（約 15KB，完整版）。其他語言兩種模式內容相同。
 
 ## Skills 清單
+
+### Financial
+
+| Skill 名稱 | 說明 |
+|------------|------|
+| `financial-health-risk` | 財務健康風險分析：流動性、獲利能力、槓桿、現金流、Altman Z-Score、成長性六維度分析，支援 PDF 輸入與雙語財報 |
 
 ### Go
 

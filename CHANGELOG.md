@@ -4,6 +4,20 @@
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-05-07
+
+### ✨ Added
+- 新增 `financial-health-risk` Skill（Financial 分類），Skills 總數從 50 增加至 51 個
+  - 支援讀入本地 PDF、PDF URL、財務網頁 URL（自動判斷類型）
+  - 六維度財務健康分析：流動性、獲利能力、槓桿/償債、現金流、Altman Z-Score、成長性
+  - 附 Python 解析腳本 `extract_financials.py`：針對台灣 TWSE/MOPS 財報格式優化（IFRS 科目代碼精確定位）
+  - 附三份 references：指標公式速查手冊、台灣/國際行業基準值、風險評分規則
+  - 支援繁體中文與英文雙語財報
+  - 輸出含風險儀表板、詳細分析表格、Altman Z-Score、改善建議的 Markdown 報告
+
+### 📝 Changed
+- 更新 README.md：新增 Financial 分類區塊，Skills 總數更新為 51 個
+
 ## [1.0.4] - 2026-05-07
 
 ### ✨ Added
