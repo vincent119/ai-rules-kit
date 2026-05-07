@@ -51,6 +51,12 @@ type: skill
 - Pipeline 階段定義與最佳化
 - 環境與分支策略規劃
 
+## 相關技能
+
+- `devops-cicd-pipeline` — 若需要實際產出 Pipeline YAML 設定檔、整合安全掃描與監控設計，使用此技能（AI 協調執行，非文件化工具）
+- `devops-deployment-strategies` — 部署策略詳細參考（Blue-Green/Canary/Rolling、Rollback、DORA Metrics）
+- `devops-pipeline-security-gates` — Pipeline 安全閘門設計（SAST/SCA/Container Scan 工具選擇與閾值）
+
 ## 參考檔案
 
 - `references/CICD-PIPELINE.template.md` - CI/CD Pipeline 範本（含部署流程、Rollback、策略）

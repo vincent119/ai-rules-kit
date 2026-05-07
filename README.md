@@ -25,7 +25,7 @@
 
 - 支援 5 種主流 AI IDE，一套規範多處部署
 - 涵蓋 9 種程式語言的編碼規範
-- 內建 38 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps 等
+- 內建 50 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps 等
 - 自動產生各 IDE 所需的 frontmatter 格式
 - 支援專案層級與使用者層級（全域）安裝
 - 提供 `--dry-run` 預覽模式，安裝前可確認寫入路徑
@@ -126,6 +126,14 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 | `react-performance` | 效能最佳化：memo/useMemo/useCallback、虛擬化列表、Code Splitting、Re-render 診斷 |
 | `react-project-structure` | 專案目錄結構：Feature-based 組織、元件分層、共用模組擺放、Monorepo 配置 |
 
+### Dev
+
+| Skill 名稱 | 說明 |
+|------------|------|
+| `dev-code-reviewer` | 自動化程式碼審查：風格、安全性、效能、架構 4 領域並行審查，產出優先級排序的綜合報告 |
+| `dev-vulnerability-patterns` | 漏洞模式資料庫：CWE Top 25 分類、Python/JS/Java/Go 語言特定漏洞模式與安全替代方案 |
+| `dev-refactoring-catalog` | 重構目錄：程式碼異味識別、SOLID 違反偵測、Cyclomatic/Cognitive 複雜度量測、設計模式應用指南 |
+
 ### SRE / DevOps
 
 | Skill 名稱 | 說明 |
@@ -137,6 +145,20 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 | `aws-eks-ami` | 查詢 Amazon EKS 專用 AMI（AL2023 x86_64），支援多版本、多地區查詢 |
 | `k8s-debug` | Kubernetes 除錯：Pod 狀態、Logs、Events、Exec、資源監控 |
 | `release-workflow` | Release 流程：Test、Tag、Push，支援 Go/Python/Node.js/Bash/YAML 專案 |
+| `devops-cicd-pipeline` | CI/CD Pipeline 設計與建置：Pipeline 設計、YAML 產出、安全掃描整合、監控設計 |
+| `devops-deployment-strategies` | 部署策略目錄：Blue-Green/Canary/Rolling 比較、Rollback 程序、Health Check、DORA Metrics |
+| `devops-pipeline-security-gates` | Pipeline 安全閘門：SAST/SCA/Container Scan 工具選擇、Gate 位置策略、漏洞閾值設定 |
+| `sre-incident-postmortem` | 事故事後分析（Postmortem）完整流程：時間軸重建 → 根因分析 → 影響評估 → 改善規劃 → 報告審查 |
+| `sre-rca-methodology` | 根因分析方法論：5 Whys、Fishbone 圖、Fault Tree Analysis、變更分析、認知偏誤防範 |
+| `sre-sla-impact-calculator` | SLA/SLO 影響計算：可用性等級對照、Error Budget 計算、營收損失估算、信用退款計算 |
+
+### Presentation
+
+| Skill 名稱 | 說明 |
+|------------|------|
+| `pres-presentation-designer` | 簡報設計完整製作流程：故事結構 → 資訊設計 → 視覺設計 → 講者備稿 → 品質審查 |
+| `pres-slide-layout-patterns` | 投影片版面模式庫：20 種版面模式、格線系統、設計 Token、無障礙設計標準 |
+| `pres-data-visualization-guide` | 資料視覺化指南：圖表選擇矩陣、LATCH 資訊架構、數字格式化、色彩無障礙 |
 
 ### 通用
 
@@ -292,7 +314,7 @@ ai-rules-kit/
 │   ├── go-grpc/
 │   ├── rust-error-handling/
 │   ├── sre-vpc-architecture/
-│   └── ...（共 38 個）
+│   └── ...（共 50 個）
 ├── package.json
 ├── LICENSE
 └── README.md

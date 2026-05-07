@@ -56,6 +56,8 @@ type: skill
 
 - `sre-vpc-architecture` - AWS VPC 架構文件產生
 - `sre-cicd-pipeline` - CI/CD Pipeline 文件產生
+- `sre-sla-impact-calculator` - 事故發生後的 SLA 影響計算、Error Budget 消耗與營收損失估算
+- `sre-incident-postmortem` - 完整的事故事後分析（Postmortem）流程
 
 ## 參考檔案
 

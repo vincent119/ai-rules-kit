@@ -4,6 +4,31 @@
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-05-07
+
+### ✨ Added
+- 新增 12 個領域 Skills，總數從 38 增加至 50 個
+- **Dev 分類**（3 個）：`dev-code-reviewer`、`dev-vulnerability-patterns`、`dev-refactoring-catalog`
+  - 自動化程式碼審查完整流程（風格、安全性、效能、架構 4 領域並行）
+  - CWE Top 25 漏洞模式資料庫（Python/JS/Java/Go）
+  - 程式碼重構目錄（Code Smells、SOLID、複雜度指標）
+- **SRE 分類**（3 個）：`sre-incident-postmortem`、`sre-rca-methodology`、`sre-sla-impact-calculator`
+  - 事故事後分析（Postmortem）完整 7 階段流程
+  - 根因分析方法論（5 Whys、Fishbone、Fault Tree）
+  - SLA/SLO 影響計算與 Error Budget 管理
+- **DevOps 分類**（3 個）：`devops-cicd-pipeline`、`devops-deployment-strategies`、`devops-pipeline-security-gates`
+  - CI/CD Pipeline 設計與建置（產出可用 YAML 設定檔）
+  - 部署策略目錄（Blue-Green/Canary/Rolling + DORA Metrics）
+  - Pipeline 安全閘門設計（SAST/SCA/Container Scan 工具選擇）
+- **Presentation 分類**（3 個）：`pres-presentation-designer`、`pres-slide-layout-patterns`、`pres-data-visualization-guide`
+  - 簡報設計完整製作流程（故事結構 → 視覺設計 → 講者備稿）
+  - 投影片版面模式庫（20 種版面 + 設計 Token）
+  - 資料視覺化指南（圖表選擇矩陣 + LATCH + 色彩無障礙）
+
+### 🔗 Changed
+- 建立 skills 間的雙向關聯（`sre-cicd-pipeline` ↔ `devops-cicd-pipeline`、`sre-sla-impact-calculator` ↔ `sre-documentation-generation` 等）
+- 更新 README.md Skills 總數為 50 個，新增 Dev 與 Presentation 分類區塊
+
 ## [1.0.3] - 2026-04-29
 
 ### ✨ Added
