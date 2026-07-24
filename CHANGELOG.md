@@ -4,12 +4,20 @@
 
 ## [Unreleased]
 
-## [1.0.6] - 2026-07-24
+## [1.0.7] - 2026-07-24
 
 ### ✨ Added
 - 新增 Codex 安裝目標，支援 `--codex`
   - 專案層級：`AGENTS.md`、`.codex/rules/`、`.codex/skills/`
   - 使用者層級：`~/.codex/AGENTS.md`、`~/.codex/rules/`、`~/.codex/skills/`
+
+### 📝 Changed
+- 更新 README.md：新增 Codex 支援、安裝範例與 IDE 安裝路徑對照
+- 更新 package version 至 `1.0.7`
+
+## [1.0.6] - 2026-07-24
+
+### ✨ Added
 - 新增 `sdd-skill` Skill，Skills 總數從 51 增加至 52 個
   - 支援在實作前建立 `.specs` 下的 `requirements.md`、`design.md`、`tasks.md`
   - 提供正式 spec 與 draft 文件範本
@@ -21,7 +29,7 @@
   - Type 支援 `Feature`、`BugFix`、`Refactor`、`Docs`、`Chore`
 
 ### 📝 Changed
-- 更新 README.md：新增 Codex、`sdd-skill`、`.specs` 共用規範入口與已安裝規範更新說明
+- 更新 README.md：新增 `sdd-skill`、`.specs` 共用規範入口與已安裝規範更新說明
 - 將 `source/kiro-specs.md` 從 Kiro-only 規範調整為多 agent 共用 `.specs` 規範
 - 更新 package version 至 `1.0.6`
 
