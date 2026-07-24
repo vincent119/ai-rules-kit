@@ -4,6 +4,30 @@
 
 ## [Unreleased]
 
+## [1.0.6] - 2026-07-24
+
+### ✨ Added
+- 新增 Codex 安裝目標，支援 `--codex`
+  - 專案層級：`AGENTS.md`、`.codex/rules/`、`.codex/skills/`
+  - 使用者層級：`~/.codex/AGENTS.md`、`~/.codex/rules/`、`~/.codex/skills/`
+- 新增 `sdd-skill` Skill，Skills 總數從 51 增加至 52 個
+  - 支援在實作前建立 `.specs` 下的 `requirements.md`、`design.md`、`tasks.md`
+  - 提供正式 spec 與 draft 文件範本
+  - 新增 `scripts/create_spec.js`，可建立正式 spec 或 draft 目錄與初始文件
+  - 加入文件定位、已知契約狀態、Bounded Context、Protected Behavior、Boundary 與 Verify 等規劃護欄
+- 新增 `.specs` 共用規範，供 Codex、Claude、Kiro 與其他 agent 使用
+  - 正式 spec 目錄格式：`.specs/{YYYY-MM-DD-HH-mm}_{Type}-{kebab-case-name}/`
+  - Draft 目錄格式：`.specs/drafts/{YYYY-MM-DD-HH-mm}_Draft-{kebab-case-name}/`
+  - Type 支援 `Feature`、`BugFix`、`Refactor`、`Docs`、`Chore`
+
+### 📝 Changed
+- 更新 README.md：新增 Codex、`sdd-skill`、`.specs` 共用規範入口與已安裝規範更新說明
+- 將 `source/kiro-specs.md` 從 Kiro-only 規範調整為多 agent 共用 `.specs` 規範
+- 更新 package version 至 `1.0.6`
+
+### 🔧 Fixed
+- 修正 npm package metadata，避免 publish 時由 npm 自動校正 `bin` 與 `repository.url`
+
 ## [1.0.5] - 2026-05-07
 
 ### ✨ Added

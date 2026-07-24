@@ -26,7 +26,7 @@
 
 ## 功能特色
 
-- 支援 5 種主流 AI IDE，一套規範多處部署
+- 支援 6 種主流 AI IDE，一套規範多處部署
 - 涵蓋 9 種程式語言的編碼規範
 - 內建 52 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps、Financial 等
 - 自動產生各 IDE 所需的 frontmatter 格式
@@ -43,6 +43,9 @@ npx @vincent119/ai-rules-kit --kiro
 # 安裝 Go + Rust 規範到 Cursor
 npx @vincent119/ai-rules-kit --cursor --lang "go,rust"
 
+# 安裝全部 Skills 到 Codex（專案層級）
+npx @vincent119/ai-rules-kit --codex --skills
+
 # 安裝到 GitHub Copilot（全域）
 npx @vincent119/ai-rules-kit --copilot --global
 ```
@@ -58,8 +61,11 @@ npx @vincent119/ai-rules-kit --kiro
 # 更新全域 Copilot 規範
 npx @vincent119/ai-rules-kit --copilot --global
 
+# 更新 Codex 專案層級 Skills
+npx @vincent119/ai-rules-kit --codex --skills
+
 # 更新指定 Skills
-npx @vincent119/ai-rules-kit --kiro --skills "sdd-skill,go-ddd"
+npx @vincent119/ai-rules-kit --codex --skills "sdd-skill,go-ddd"
 ```
 
 更新前可先使用 `--dry-run` 檢查寫入路徑：
@@ -84,10 +90,11 @@ npx @vincent119/ai-rules-kit --kiro --dry-run
 | `--copilot` / `--vscode` | GitHub Copilot (VS Code / JetBrains) | O |
 | `--cursor` | Cursor | - |
 | `--claude` | Claude Code | - |
+| `--codex` | Codex | O |
 | `--kiro` | Kiro | O |
 | `--antigravity` | Antigravity (Google) | O |
 
-Skills 在 Copilot、Kiro 與 Antigravity 中支援，其他 IDE 僅安裝語言規範與全域規範。
+Skills 在 Copilot、Codex、Kiro 與 Antigravity 中支援，其他 IDE 僅安裝語言規範與全域規範。
 
 ## 語言規範
 
@@ -199,7 +206,7 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 | `changelog-generator` | Transform Git commits into user-facing changelogs. |
 | `git-repo-init` | Git repo 初始化範本產生器。 |
 | `meeting-transcriber` | 會議錄音轉會議紀要。 |
-| `sdd-skill` | SDD（Spec Driven Development）工作流程。 |
+| `sdd-skill` | SDD（Spec Driven Development）工作流程，供 Codex 與其他 agent 在實作前建立 `.specs` 規格文件。 |
 | `skill-creator` | Guide for creating effective skills. |
 | `test-coverage` | Run tests with coverage reports for Go, Python, and Node. |
 | `ui-component-guidelines` | UI 元件設計規範。 |
@@ -219,6 +226,7 @@ npx @vincent119/ai-rules-kit --<ide> [選項]
 | `--copilot` / `--vscode` | 安裝到 GitHub Copilot |
 | `--cursor` | 安裝到 Cursor |
 | `--claude` | 安裝到 Claude Code |
+| `--codex` | 安裝到 Codex |
 | `--kiro` | 安裝到 Kiro |
 | `--antigravity` | 安裝到 Antigravity |
 
@@ -238,7 +246,7 @@ npx @vincent119/ai-rules-kit --<ide> [選項]
 | 參數 | 預設值 | 說明 |
 |------|--------|------|
 | `--global` | `false` | 安裝到使用者目錄（全域），而非專案目錄（hooks 不支援 global） |
-| `--mode <minimal\|extended>` | copilot/claude: `minimal`，其他: `extended` | 規範版本 |
+| `--mode <minimal\|extended>` | copilot/claude/codex: `minimal`，其他: `extended` | 規範版本 |
 | `--lang <languages>` | 全部 | 語言規範，逗號分隔指定語言 |
 | `--skills <names>` | 全部 | 只安裝指定的 Skills，逗號分隔 |
 | `--extras <names>` | 無 | 額外規範：`commit`（Commit Message）、`pr`（Pull Request） |
@@ -259,14 +267,14 @@ npx @vincent119/ai-rules-kit --<ide> [選項]
 
 | 模式 | 說明 | 適用場景 |
 |------|------|---------|
-| `minimal` | 精簡版，約 3KB | Copilot、Claude Code 等有 context 大小限制的 IDE |
+| `minimal` | 精簡版，約 3KB | Copilot、Claude Code、Codex 等有 context 大小限制的 IDE |
 | `extended` | 完整版，約 15KB | Cursor、Kiro、Antigravity 等無限制的 IDE |
 
 目前僅 Go 語言區分兩種模式，其他語言兩種模式內容相同。
 
 ## Specs 共用規範
 
-`.specs` 用於多個 agent 共用的開發前規格文件。正式 spec 目錄格式為：
+`.specs` 用於 Codex、Claude、Kiro 與其他 agent 共用的開發前規格文件。正式 spec 目錄格式為：
 
 ```text
 .specs/{YYYY-MM-DD-HH-mm}_{Type}-{kebab-case-name}/
@@ -289,6 +297,7 @@ Draft 目錄格式為：
 | Copilot | `.github/copilot-instructions.md` | `.github/instructions/<lang>.instructions.md` | `.github/skills/<name>/` | - |
 | Cursor | - | `.cursor/rules/<lang>.mdc` | - | - |
 | Claude Code | `CLAUDE.md` | `.claude/rules/<lang>.md` | - | `.claude/settings.json` |
+| Codex | `AGENTS.md` | `.codex/rules/<lang>.md` | `.codex/skills/<name>/` | - |
 | Kiro | - | `.kiro/steering/<lang>.md` | `.kiro/skills/<name>/` | `.kiro/hooks/` + `.kiro/agents/` |
 | Antigravity | `.gemini/GEMINI.md` | `.agent/rules/<lang>.md` | `.agent/skills/<name>/` | - |
 
@@ -299,6 +308,7 @@ Draft 目錄格式為：
 | Copilot | - | `~/.copilot/instructions/<lang>.instructions.md` | `~/.copilot/skills/<name>/` |
 | Cursor | - | `~/.cursor/rules/<lang>.mdc` | - |
 | Claude Code | `~/.claude/CLAUDE.md` | `~/.claude/rules/<lang>.md` | - |
+| Codex | `~/.codex/AGENTS.md` | `~/.codex/rules/<lang>.md` | `~/.codex/skills/<name>/` |
 | Kiro | - | `~/.kiro/steering/<lang>.md` | `~/.kiro/skills/<name>/` |
 | Antigravity | `~/.gemini/GEMINI.md` | `~/.agent/rules/<lang>.md` | `~/.agent/skills/<name>/` |
 
@@ -312,6 +322,9 @@ npx @vincent119/ai-rules-kit --kiro
 
 # Go 規範安裝到 Copilot（minimal 模式）
 npx @vincent119/ai-rules-kit --copilot
+
+# Codex 安裝全部 Skills
+npx @vincent119/ai-rules-kit --codex --skills
 ```
 
 ### 選擇性安裝
@@ -441,6 +454,7 @@ Hooks 是自動化工作流程，當特定事件發生時（如檔案儲存、�
 | Kiro | ✓ | IDE UI hook（`.kiro.hook`）+ CLI agent hook（agent JSON） |
 | Claude Code | ✓ | 透過 `.claude/settings.json` 設定 |
 | Copilot | - | 不支援 |
+| Codex | - | 不支援 |
 | Cursor | - | 不支援 |
 | Antigravity | - | 不支援 |
 

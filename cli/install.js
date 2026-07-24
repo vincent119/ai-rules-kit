@@ -51,6 +51,23 @@ const IDE_CONFIG = {
       ext: '.md',
     },
   },
+  codex: {
+    name: 'Codex',
+    supportsSkills: true,
+    supportsHooks: false,
+    project: {
+      global: 'AGENTS.md',
+      rules: '.codex/rules',
+      skills: '.codex/skills',
+      ext: '.md',
+    },
+    user: {
+      global: path.join(os.homedir(), '.codex', 'AGENTS.md'),
+      rules: path.join(os.homedir(), '.codex', 'rules'),
+      skills: path.join(os.homedir(), '.codex', 'skills'),
+      ext: '.md',
+    },
+  },
   kiro: {
     name: 'Kiro',
     supportsSkills: true,
@@ -160,6 +177,7 @@ function parseArgs() {
       case '--copilot': case '--vscode': opts.ide = 'copilot'; break;
       case '--cursor': opts.ide = 'cursor'; break;
       case '--claude': opts.ide = 'claude'; break;
+      case '--codex': opts.ide = 'codex'; break;
       case '--kiro': opts.ide = 'kiro'; break;
       case '--antigravity': opts.ide = 'antigravity'; break;
       case '--mode': opts.mode = args[++i]; break;
@@ -189,7 +207,7 @@ function parseArgs() {
 
   if (!opts.lang) opts.lang = null;
   if (!opts.mode) {
-    opts.mode = (opts.ide === 'copilot' || opts.ide === 'claude') ? 'minimal' : 'extended';
+    opts.mode = (opts.ide === 'copilot' || opts.ide === 'claude' || opts.ide === 'codex') ? 'minimal' : 'extended';
   }
 
   return opts;
@@ -207,6 +225,7 @@ ${C.ylw}IDE 選項：${C.r}
   --copilot, --vscode   GitHub Copilot (VS Code / JetBrains)
   --cursor              Cursor
   --claude              Claude Code
+  --codex               Codex
   --kiro                Kiro
   --antigravity         Antigravity (Google)
 
@@ -221,7 +240,7 @@ ${C.ylw}範圍：${C.r}
   --global              安裝到使用者目錄（hooks 不支援 global）
 
 ${C.ylw}其他選項：${C.r}
-  --mode <minimal|extended>   規範版本（預設：copilot/claude=minimal, 其他=extended）
+  --mode <minimal|extended>   規範版本（預設：copilot/claude/codex=minimal, 其他=extended）
   --lang <go|bash|rust|...>   語言規範（預設：全部，逗號分隔）
   --skills <names>            只安裝指定 Skills（逗號分隔）
   --extras "commit,pr"        額外規範（commit-message, pull-request）
@@ -233,6 +252,7 @@ ${C.ylw}範例：${C.r}
   npx @vincent119/ai-rules-kit --kiro --rules --lang "go,rust"
   npx @vincent119/ai-rules-kit --kiro --hooks
   npx @vincent119/ai-rules-kit --claude --hooks
+  npx @vincent119/ai-rules-kit --codex --skills
   npx @vincent119/ai-rules-kit --kiro --global --rules
 `);
 }
@@ -304,6 +324,7 @@ function wrapFrontmatter(ide, content, type, glob) {
       if (type === 'global') return `---\nglobs: "**/*"\nalwaysApply: true\n---\n\n${content}`;
       return `---\nglobs: "${glob}"\nalwaysApply: true\n---\n\n${content}`;
     case 'claude':
+    case 'codex':
       return content;
     case 'kiro':
       if (type === 'global') return `---\ninclusion: always\n---\n\n${content}`;
@@ -452,14 +473,15 @@ function install(opts) {
       }
     }
 
-    // Kiro 專屬規範
-    if (opts.ide === 'kiro') {
+    // Specs 共用規範
+    if (opts.ide === 'kiro' || opts.ide === 'codex') {
       for (const filename of ['kiro-specs.md']) {
         const content = readSource(sourceDir, filename);
         if (content) {
           const wrapped = wrapFrontmatter(opts.ide, content, 'global', '**');
           const rulesDir = opts.global ? paths.rules : path.resolve(cwd, paths.rules);
-          actions.push({ type: 'write', dest: path.join(rulesDir, filename.replace(/\.md$/, '') + paths.ext), content: wrapped });
+          const outputName = opts.ide === 'codex' ? 'specs' : filename.replace(/\.md$/, '');
+          actions.push({ type: 'write', dest: path.join(rulesDir, outputName + paths.ext), content: wrapped });
         }
       }
     }
@@ -535,7 +557,7 @@ function main() {
   if (opts.skills === 'list') { showSkillList(); process.exit(0); }
 
   if (!opts.ide) {
-    log('請指定 IDE：--copilot / --cursor / --claude / --kiro / --antigravity', 'red');
+    log('請指定 IDE：--copilot / --cursor / --claude / --codex / --kiro / --antigravity', 'red');
     log('使用 --help 查看完整說明', 'ylw');
     process.exit(1);
   }
