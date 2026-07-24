@@ -8,6 +8,7 @@
 
 - [功能特色](#功能特色)
 - [快速開始](#快速開始)
+- [更新已安裝規範](#更新已安裝規範)
 - [系統需求](#系統需求)
 - [支援的 IDE](#支援的-ide)
 - [語言規範](#語言規範)
@@ -15,6 +16,7 @@
 - [CLI 參考](#cli-參考)
 - [安裝範圍](#安裝範圍)
 - [規範模式](#規範模式)
+- [Specs 共用規範](#specs-共用規範)
 - [IDE 安裝路徑對照](#ide-安裝路徑對照)
 - [使用範例](#使用範例)
 - [專案結構](#專案結構)
@@ -26,7 +28,7 @@
 
 - 支援 5 種主流 AI IDE，一套規範多處部署
 - 涵蓋 9 種程式語言的編碼規範
-- 內建 51 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps、Financial 等
+- 內建 52 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps、Financial 等
 - 自動產生各 IDE 所需的 frontmatter 格式
 - 支援專案層級與使用者層級（全域）安裝
 - 提供 `--dry-run` 預覽模式，安裝前可確認寫入路徑
@@ -44,6 +46,29 @@ npx @vincent119/ai-rules-kit --cursor --lang "go,rust"
 # 安裝到 GitHub Copilot（全域）
 npx @vincent119/ai-rules-kit --copilot --global
 ```
+
+## 更新已安裝規範
+
+已安裝過的專案或使用者層級規範，可重新執行相同指令更新。
+
+```bash
+# 更新 Kiro 專案層級 rules、skills、hooks
+npx @vincent119/ai-rules-kit --kiro
+
+# 更新全域 Copilot 規範
+npx @vincent119/ai-rules-kit --copilot --global
+
+# 更新指定 Skills
+npx @vincent119/ai-rules-kit --kiro --skills "sdd-skill,go-ddd"
+```
+
+更新前可先使用 `--dry-run` 檢查寫入路徑：
+
+```bash
+npx @vincent119/ai-rules-kit --kiro --dry-run
+```
+
+更新會依目前選項重新寫入對應檔案。若專案內曾手動修改已安裝的 rules、skills 或 hooks，請先備份或使用版本控制確認差異。
 
 ## 系統需求
 
@@ -174,6 +199,7 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 | `changelog-generator` | Transform Git commits into user-facing changelogs. |
 | `git-repo-init` | Git repo 初始化範本產生器。 |
 | `meeting-transcriber` | 會議錄音轉會議紀要。 |
+| `sdd-skill` | SDD（Spec Driven Development）工作流程。 |
 | `skill-creator` | Guide for creating effective skills. |
 | `test-coverage` | Run tests with coverage reports for Go, Python, and Node. |
 | `ui-component-guidelines` | UI 元件設計規範。 |
@@ -237,6 +263,22 @@ npx @vincent119/ai-rules-kit --<ide> [選項]
 | `extended` | 完整版，約 15KB | Cursor、Kiro、Antigravity 等無限制的 IDE |
 
 目前僅 Go 語言區分兩種模式，其他語言兩種模式內容相同。
+
+## Specs 共用規範
+
+`.specs` 用於多個 agent 共用的開發前規格文件。正式 spec 目錄格式為：
+
+```text
+.specs/{YYYY-MM-DD-HH-mm}_{Type}-{kebab-case-name}/
+```
+
+Draft 目錄格式為：
+
+```text
+.specs/drafts/{YYYY-MM-DD-HH-mm}_Draft-{kebab-case-name}/
+```
+
+`Type` 僅允許 `Feature`、`BugFix`、`Refactor`、`Docs`、`Chore`。完整規則見 `source/kiro-specs.md`。
 
 ## IDE 安裝路徑對照
 
@@ -341,7 +383,7 @@ ai-rules-kit/
 │   ├── yaml.md
 │   ├── helm.md
 │   ├── pulumi.md
-│   ├── kiro-specs.md        # Kiro Specs 規範
+│   ├── kiro-specs.md        # Specs 共用規範
 │   ├── commit-message.md    # Commit Message 規範
 │   └── pull-request.md      # Pull Request 規範
 ├── skills/                  # 領域 Skills
@@ -349,7 +391,7 @@ ai-rules-kit/
 │   ├── go-grpc/
 │   ├── rust-error-handling/
 │   ├── sre-vpc-architecture/
-│   └── ...（共 51 個）
+│   └── ...（共 52 個）
 ├── hooks/                   # Hooks（Kiro / Claude Code）
 │   └── update-readme/
 │       ├── update-readme.kiro.hook      # Kiro IDE UI hook
