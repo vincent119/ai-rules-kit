@@ -15,6 +15,7 @@
   "files": [
     "source/",
     "skills/",
+    "hooks/",
     "cli/",
     "README.md",
     "LICENSE"

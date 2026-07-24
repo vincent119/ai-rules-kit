@@ -1,7 +1,6 @@
 ---
 name: go-http-advanced
-description: |
-  Go HTTP 進階實作：Transport 重用與配置、重試策略與指數退避、Body 重播機制、
+description: Go HTTP 進階實作：Transport 重用與配置、重試策略與指數退避、Body 重播機制、
   Multipart 上傳、逾時控制、HTTP Client 最佳實務、Context 傳遞。
 
   **適用場景**：實作 HTTP Client、設計重試策略、處理 Body 重播、Multipart 檔案上傳、

@@ -19,6 +19,7 @@
 - [使用範例](#使用範例)
 - [專案結構](#專案結構)
 - [貢獻指南](#貢獻指南)
+- [Hooks](#hooks)
 - [授權](#授權)
 
 ## 功能特色
@@ -92,97 +93,97 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 
 | Skill 名稱 | 說明 |
 |------------|------|
-| `financial-health-risk` | 財務健康風險分析：流動性、獲利能力、槓桿、現金流、Altman Z-Score、成長性六維度分析，支援 PDF 輸入與雙語財報 |
+| `financial-health-risk` | 財務健康風險分析完整流程。 |
 
 ### Go
 
 | Skill 名稱 | 說明 |
 |------------|------|
-| `go-ddd` | DDD 架構設計：Bounded Context、Aggregate Root、Repository Pattern、Shared Kernel |
-| `go-grpc` | gRPC 實作：Proto 管理、Buf、Interceptor、健康檢查、Deadline 處理、GracefulStop |
-| `go-api-design` | API 設計：JSON Envelope、Pagination、Filter、Sort、Swagger、版本管理 |
-| `go-database` | Database Migration 與 ORM：golang-migrate/goose、命名慣例、CI/CD 整合 |
-| `go-testing-advanced` | 進階測試：Table-driven tests、Mocking、整合測試、Benchmark、Fuzz testing |
-| `go-observability` | 可觀測性：結構化日誌（zap/slog）、Prometheus Metrics、OpenTelemetry、Trace ID |
-| `go-http-advanced` | HTTP 進階：Transport 重用、重試策略、指數退避、Multipart 上傳、逾時控制 |
-| `go-ci-tooling` | CI/CD 工具：Makefile、golangci-lint、GitHub Actions、Docker、Pre-commit Hook |
-| `go-configuration` | 設定管理：Viper、環境變數優先級、Secrets 處理、動態重載、12-Factor App |
-| `go-dependency-injection` | 依賴注入：Interface 設計、Constructor Pattern、Uber Fx/Wire、生命週期管理 |
-| `go-domain-events` | Domain Events：事件定義、Event Bus、Outbox Pattern、冪等處理、Event Sourcing |
-| `go-graceful-shutdown` | 優雅關機：Signal 處理、HTTP/gRPC shutdown、Kubernetes 整合、資源清理 |
-| `go-examples` | 實作範例庫：HTTP Client、Repository、Use Case、Handler、Service 範例 |
+| `go-api-design` | Go API 設計與版本管理：JSON Envelope、Request/Response 模式、API Versioning、 Pagination、Filter、Sort、Swagger 文件、棄用通知、HTTP 狀態碼最佳實務。 |
+| `go-ci-tooling` | Go CI/CD 工具配置：Makefile、golangci-lint、GitHub Actions、Docker、測試覆蓋率、 自動化流程、Pre-commit Hook。 |
+| `go-configuration` | Go 設定管理最佳實務：Viper 配置、環境變數優先級、Secrets 處理、設定驗證、 動態重載、多環境管理、12-Factor App 原則。 |
+| `go-database` | Go Database Migration 與 ORM 規範：Migration 工具選擇（golang-migrate/goose）、 命名慣例、版本控制、CI/CD 整合、最佳實務（pt-online-schema-change, gh-ost）。 |
+| `go-ddd` | Go DDD 架構設計規範：領域驅動設計 (Domain-Driven Design)、Bounded Context（限界上下文）、 Aggregate Root（聚合根）、Repository Pattern、Shared Kernel（共用核心）、依賴注入整合。 |
+| `go-dependency-injection` | Go 依賴注入模式與工具：Interface 設計、Constructor Pattern、Uber Fx/Wire 使用、 測試替身模式、生命週期管理、模組化架構。 |
+| `go-domain-events` | Go Domain Events 實作：事件定義、發布模式、Event Bus、Outbox Pattern、冪等處理、 Event Sourcing 基礎、非同步處理。 |
+| `go-examples` | Go 實作範例庫：完整的 HTTP Client、Repository Pattern、Use Case、Handler、 Service 實作範例，涵蓋常見場景的最佳實務程式碼。 |
+| `go-graceful-shutdown` | Go 優雅關機（Graceful Shutdown）模式：Signal 處理、HTTP Server shutdown、gRPC GracefulStop、 Worker/Consumer 停止、Kubernetes 整合、Context 取消機制、資源清理流程。 |
+| `go-grpc` | Go gRPC 完整實作規範：Proto 檔案管理、Buf 使用、Interceptor 設計、健康檢查協議、 Deadline 與 Context 處理、錯誤代碼映射、優雅關機（GracefulStop）。 |
+| `go-http-advanced` | Go HTTP 進階實作：Transport 重用與配置、重試策略與指數退避、Body 重播機制、 Multipart 上傳、逾時控制、HTTP Client 最佳實務、Context 傳遞。 |
+| `go-observability` | Go 可觀測性規範：結構化日誌（zap/slog）、Prometheus Metrics 規範、OpenTelemetry 整合、 Context 傳遞與 Trace ID 串接、日誌等級管理、Metrics 命名慣例。 |
+| `go-testing-advanced` | Go 進階測試策略：Table-driven tests 進階模式、Mocking 策略（uber-go/mock）、 整合測試設計、Benchmark 與 Fuzz testing、測試覆蓋率要求、測試金字塔原則。 |
 
 ### Rust
 
 | Skill 名稱 | 說明 |
 |------------|------|
-| `rust-error-handling` | 錯誤處理：自訂錯誤型別、錯誤傳播、anyhow/thiserror 選擇、Result 組合子 |
-| `rust-api-design` | API 設計：Builder Pattern、Newtype、型別安全、trait 設計、泛型 API、Sealed traits |
-| `rust-async-concurrency` | 非同步與並行：tokio runtime、async/await、Send+Sync、共享狀態、channel 模式 |
-| `rust-testing` | 測試策略：單元測試、整合測試、mock、property-based testing、benchmark |
-| `rust-safety-performance` | 安全性與效能：unsafe 規範、soundness、記憶體安全、profiling、allocator 選擇 |
-| `rust-project-structure` | 專案目錄結構：workspace 組織、crate 拆分、模組層級、binary/library 分離 |
+| `rust-api-design` | Rust API 設計模式。 |
+| `rust-async-concurrency` | Rust 非同步與並行模式。 |
+| `rust-error-handling` | Rust 錯誤處理模式。 |
+| `rust-project-structure` | Rust 專案目錄結構。 |
+| `rust-safety-performance` | Rust 安全性與效能最佳實踐。 |
+| `rust-testing` | Rust 測試策略。 |
 
 ### React
 
 | Skill 名稱 | 說明 |
 |------------|------|
-| `react-component-patterns` | 元件設計模式：Compound Components、Polymorphic、受控/非受控、Slot Pattern、Render Props |
-| `react-hooks-state` | Hooks 與狀態管理：自訂 Hooks、useReducer、Context 架構、Server State、表單處理 |
-| `react-performance` | 效能最佳化：memo/useMemo/useCallback、虛擬化列表、Code Splitting、Re-render 診斷 |
-| `react-project-structure` | 專案目錄結構：Feature-based 組織、元件分層、共用模組擺放、Monorepo 配置 |
+| `react-component-patterns` | React 元件設計模式。 |
+| `react-hooks-state` | React Hooks 與狀態管理模式。 |
+| `react-performance` | React 效能最佳化模式。 |
+| `react-project-structure` | React 專案目錄結構。 |
 
 ### Dev
 
 | Skill 名稱 | 說明 |
 |------------|------|
-| `dev-code-reviewer` | 自動化程式碼審查：風格、安全性、效能、架構 4 領域並行審查，產出優先級排序的綜合報告 |
-| `dev-vulnerability-patterns` | 漏洞模式資料庫：CWE Top 25 分類、Python/JS/Java/Go 語言特定漏洞模式與安全替代方案 |
-| `dev-refactoring-catalog` | 重構目錄：程式碼異味識別、SOLID 違反偵測、Cyclomatic/Cognitive 複雜度量測、設計模式應用指南 |
+| `dev-code-reviewer` | 自動化程式碼審查完整流程。 |
+| `dev-refactoring-catalog` | 程式碼重構目錄。 |
+| `dev-vulnerability-patterns` | 程式碼漏洞模式資料庫。 |
 
 ### SRE / DevOps
 
 | Skill 名稱 | 說明 |
 |------------|------|
-| `sre-vpc-architecture` | AWS VPC 架構文件產生器：多環境 VPC、IP 規劃、Subnet 設計、網路拓撲、安全設計 |
-| `sre-cicd-pipeline` | CI/CD Pipeline 文件產生器：Pipeline 階段定義、部署策略、Rollback、Secrets 管理 |
-| `sre-documentation-generation` | SRE 文件產生器：SLO/SLI 定義、服務架構、容量規劃、變更管理、On-call 手冊 |
-| `devops-runbooks` | 運維手冊：Incident Response、Operational Playbooks、系統維護指南 |
-| `aws-eks-ami` | 查詢 Amazon EKS 專用 AMI（AL2023 x86_64），支援多版本、多地區查詢 |
-| `k8s-debug` | Kubernetes 除錯：Pod 狀態、Logs、Events、Exec、資源監控 |
-| `release-workflow` | Release 流程：Test、Tag、Push，支援 Go/Python/Node.js/Bash/YAML 專案 |
-| `devops-cicd-pipeline` | CI/CD Pipeline 設計與建置：Pipeline 設計、YAML 產出、安全掃描整合、監控設計 |
-| `devops-deployment-strategies` | 部署策略目錄：Blue-Green/Canary/Rolling 比較、Rollback 程序、Health Check、DORA Metrics |
-| `devops-pipeline-security-gates` | Pipeline 安全閘門：SAST/SCA/Container Scan 工具選擇、Gate 位置策略、漏洞閾值設定 |
-| `sre-incident-postmortem` | 事故事後分析（Postmortem）完整流程：時間軸重建 → 根因分析 → 影響評估 → 改善規劃 → 報告審查 |
-| `sre-rca-methodology` | 根因分析方法論：5 Whys、Fishbone 圖、Fault Tree Analysis、變更分析、認知偏誤防範 |
-| `sre-sla-impact-calculator` | SLA/SLO 影響計算：可用性等級對照、Error Budget 計算、營收損失估算、信用退款計算 |
+| `aws-eks-ami` | 查詢 Amazon EKS 專用 AMI (AL2023 x86_64)。 |
+| `devops-cicd-pipeline` | CI/CD Pipeline 設計、建置、監控與最佳化完整流程。 |
+| `devops-deployment-strategies` | 部署策略目錄。 |
+| `devops-pipeline-security-gates` | CI/CD Pipeline 安全閘門設計指南。 |
+| `devops-runbooks` | Operational runbook and procedure documentation specialist. |
+| `k8s-debug` | Kubernetes troubleshooting workflow - Pod status, logs, events, exec, and resource monitoring. |
+| `release-workflow` | Standard release workflow - Test, tag, push. |
+| `sre-cicd-pipeline` | CI/CD Pipeline 文件產生器。 |
+| `sre-documentation-generation` | SRE 文件產生器。 |
+| `sre-incident-postmortem` | 事故事後分析（Postmortem）完整流程。 |
+| `sre-rca-methodology` | 根因分析（RCA）方法論詳細指南。 |
+| `sre-sla-impact-calculator` | 基於 SLA/SLO 量化評估事故影響的計算模型與業務影響矩陣。 |
+| `sre-vpc-architecture` | AWS VPC 架構文件產生器。 |
 
 ### Presentation
 
 | Skill 名稱 | 說明 |
 |------------|------|
-| `pres-presentation-designer` | 簡報設計完整製作流程：故事結構 → 資訊設計 → 視覺設計 → 講者備稿 → 品質審查 |
-| `pres-slide-layout-patterns` | 投影片版面模式庫：20 種版面模式、格線系統、設計 Token、無障礙設計標準 |
-| `pres-data-visualization-guide` | 資料視覺化指南：圖表選擇矩陣、LATCH 資訊架構、數字格式化、色彩無障礙 |
+| `pres-data-visualization-guide` | 資料視覺化圖表選擇指南與資訊架構設計。 |
+| `pres-presentation-designer` | 簡報設計完整製作流程。 |
+| `pres-slide-layout-patterns` | 投影片版面模式庫。 |
 
 ### 通用
 
 | Skill 名稱 | 說明 |
 |------------|------|
-| `ui-design-principles` | UI 設計原則：間距系統、色彩層級、排版階層、響應式斷點、WCAG 2.1 AA 無障礙 |
-| `ui-component-guidelines` | 元件設計規範：按鈕狀態、表單驗證、Modal 行為、Toast 通知、表格互動、載入狀態 |
-| `ui-design-tokens` | Design Token 管理：三層 token 架構、CSS 變數組織、Light/Dark 主題切換 |
-| `changelog-generator` | Changelog 產生器：Git commits 轉換為 Release Notes，自動分類與過濾 |
-| `git-repo-init` | Git Repo 初始化：掃描目錄偵測語言與工具，自動產生 .gitignore、LICENSE、README.md、.editorconfig |
-| `test-coverage` | 測試覆蓋率報告：支援 Go、Python、Node.js 專案 |
-| `skill-creator` | Skill 建立指南：建立或更新 Skills 的最佳實務 |
-| `meeting-transcriber` | 會議錄音轉錄：透過 whisper.cpp 將音訊/視訊轉為文字，生成結構化會議紀要與工作日報 |
+| `changelog-generator` | Transform Git commits into user-facing changelogs. |
+| `git-repo-init` | Git repo 初始化範本產生器。 |
+| `meeting-transcriber` | 會議錄音轉會議紀要。 |
+| `skill-creator` | Guide for creating effective skills. |
+| `test-coverage` | Run tests with coverage reports for Go, Python, and Node. |
+| `ui-component-guidelines` | UI 元件設計規範。 |
+| `ui-design-principles` | UI 設計原則。 |
+| `ui-design-tokens` | Design Token 管理。 |
 
 ## CLI 參考
 
 ```
-npx @vincent119/ai-rules-kit --<ide> [options]
+npx @vincent119/ai-rules-kit --<ide> [選項]
 ```
 
 ### 必要參數
@@ -195,11 +196,22 @@ npx @vincent119/ai-rules-kit --<ide> [options]
 | `--kiro` | 安裝到 Kiro |
 | `--antigravity` | 安裝到 Antigravity |
 
+### 安裝項目（預設全部）
+
+| 參數 | 說明 |
+|------|------|
+| `--rules` | 只安裝語言規範 |
+| `--skills` | 只安裝 Skills |
+| `--hooks` | 只安裝 Hooks（僅 Kiro / Claude Code，不支援 `--global`） |
+| `--all` | 安裝全部（rules + skills + hooks） |
+
+未指定任何安裝項目旗標時，預設為 `--all`。
+
 ### 選用參數
 
 | 參數 | 預設值 | 說明 |
 |------|--------|------|
-| `--global` | `false` | 安裝到使用者目錄（全域），而非專案目錄 |
+| `--global` | `false` | 安裝到使用者目錄（全域），而非專案目錄（hooks 不支援 global） |
 | `--mode <minimal\|extended>` | copilot/claude: `minimal`，其他: `extended` | 規範版本 |
 | `--lang <languages>` | 全部 | 語言規範，逗號分隔指定語言 |
 | `--skills <names>` | 全部 | 只安裝指定的 Skills，逗號分隔 |
@@ -230,13 +242,13 @@ npx @vincent119/ai-rules-kit --<ide> [options]
 
 ### 專案層級
 
-| IDE | 全域規範 | 語言規範 | Skills |
-|-----|---------|---------|--------|
-| Copilot | `.github/copilot-instructions.md` | `.github/instructions/<lang>.instructions.md` | `.github/skills/<name>/` |
-| Cursor | - | `.cursor/rules/<lang>.mdc` | - |
-| Claude Code | `CLAUDE.md` | `.claude/rules/<lang>.md` | - |
-| Kiro | - | `.kiro/steering/<lang>.md` | `.kiro/skills/<name>/` |
-| Antigravity | `.gemini/GEMINI.md` | `.agent/rules/<lang>.md` | `.agent/skills/<name>/` |
+| IDE | 全域規範 | 語言規範 | Skills | Hooks |
+|-----|---------|---------|--------|-------|
+| Copilot | `.github/copilot-instructions.md` | `.github/instructions/<lang>.instructions.md` | `.github/skills/<name>/` | - |
+| Cursor | - | `.cursor/rules/<lang>.mdc` | - | - |
+| Claude Code | `CLAUDE.md` | `.claude/rules/<lang>.md` | - | `.claude/settings.json` |
+| Kiro | - | `.kiro/steering/<lang>.md` | `.kiro/skills/<name>/` | `.kiro/hooks/` + `.kiro/agents/` |
+| Antigravity | `.gemini/GEMINI.md` | `.agent/rules/<lang>.md` | `.agent/skills/<name>/` | - |
 
 ### 使用者層級（`--global`）
 
@@ -253,11 +265,27 @@ npx @vincent119/ai-rules-kit --<ide> [options]
 ### 基本安裝
 
 ```bash
-# Go 規範 + 全部 Skills 安裝到 Kiro
+# Go 規範 + 全部 Skills + Hooks 安裝到 Kiro（預設全部）
 npx @vincent119/ai-rules-kit --kiro
 
 # Go 規範安裝到 Copilot（minimal 模式）
 npx @vincent119/ai-rules-kit --copilot
+```
+
+### 選擇性安裝
+
+```bash
+# 只安裝語言規範
+npx @vincent119/ai-rules-kit --kiro --rules
+
+# 只安裝 Hooks
+npx @vincent119/ai-rules-kit --kiro --hooks
+
+# 只安裝 Skills
+npx @vincent119/ai-rules-kit --kiro --skills
+
+# 組合安裝（rules + hooks）
+npx @vincent119/ai-rules-kit --kiro --rules --hooks
 ```
 
 ### 多語言
@@ -313,6 +341,7 @@ ai-rules-kit/
 │   ├── yaml.md
 │   ├── helm.md
 │   ├── pulumi.md
+│   ├── kiro-specs.md        # Kiro Specs 規範
 │   ├── commit-message.md    # Commit Message 規範
 │   └── pull-request.md      # Pull Request 規範
 ├── skills/                  # 領域 Skills
@@ -320,7 +349,14 @@ ai-rules-kit/
 │   ├── go-grpc/
 │   ├── rust-error-handling/
 │   ├── sre-vpc-architecture/
-│   └── ...（共 50 個）
+│   └── ...（共 51 個）
+├── hooks/                   # Hooks（Kiro / Claude Code）
+│   └── update-readme/
+│       ├── update-readme.kiro.hook      # Kiro IDE UI hook
+│       ├── update-readme.json           # Kiro CLI agent hook
+│       ├── update-readme.claude.json    # Claude Code hook
+│       └── script/
+│           └── update-readme.js         # 共用腳本
 ├── package.json
 ├── LICENSE
 └── README.md
@@ -337,6 +373,51 @@ ai-rules-kit/
 ### 新增語言規範
 
 在 `source/` 目錄下新增 `<language>.md`，並在 `cli/install.js` 的 `LANG_CONFIG` 中加入對應設定。
+
+### 新增 Skill
+
+在 `skills/` 目錄下建立新資料夾，包含 `SKILL.md` 檔案。可參考 `skill-creator` Skill 的指南。
+
+### 新增 Hook
+
+在 `hooks/` 目錄下建立新資料夾，包含：
+- `<name>.kiro.hook`：Kiro IDE UI hook（JSON 格式）
+- `<name>.json`：Kiro CLI agent hook（JSON 格式）
+- `<name>.claude.json`：Claude Code hook（會合併到 `.claude/settings.json`）
+- `script/`：共用腳本目錄
+
+Kiro hook 腳本會安裝到 `.kiro/hooks/<name>/script/`，Claude Code hook 腳本會安裝到 `.claude/hooks/<name>/script/`。Hook command 使用 `$PWD` 從專案根目錄解析腳本路徑。
+
+## Hooks
+
+Hooks 是自動化工作流程，當特定事件發生時（如檔案儲存、工具執行後）自動執行腳本或 AI 指令。
+
+### 支援的 IDE
+
+| IDE | 支援 Hooks | 說明 |
+|-----|-----------|------|
+| Kiro | ✓ | IDE UI hook（`.kiro.hook`）+ CLI agent hook（agent JSON） |
+| Claude Code | ✓ | 透過 `.claude/settings.json` 設定 |
+| Copilot | - | 不支援 |
+| Cursor | - | 不支援 |
+| Antigravity | - | 不支援 |
+
+### 內建 Hooks
+
+#### update-readme
+
+自動偵測 `source/*.md` 或 `skills/*/SKILL.md` 被修改後，執行 `update-readme.js` 腳本更新 README 的語言規範表格與 Skills 清單。
+
+**觸發時機**：
+- Kiro IDE：檔案儲存時（`fileEdited`）
+- Kiro CLI：AI 用 `fs_write` 工具寫入檔案後（`postToolUse`）
+- Claude Code：AI 用 `Write` 工具寫入檔案後（`PostToolUse`）
+
+**安裝**：
+```bash
+npx @vincent119/ai-rules-kit --kiro --hooks
+npx @vincent119/ai-rules-kit --claude --hooks
+```
 
 ### 新增 Skill
 

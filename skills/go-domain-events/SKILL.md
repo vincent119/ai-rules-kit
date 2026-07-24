@@ -1,7 +1,6 @@
 ---
 name: go-domain-events
-description: |
-  Go Domain Events 實作：事件定義、發布模式、Event Bus、Outbox Pattern、冪等處理、
+description: Go Domain Events 實作：事件定義、發布模式、Event Bus、Outbox Pattern、冪等處理、
   Event Sourcing 基礎、非同步處理。
 
   **適用場景**：DDD Domain Events、實作 Event Bus、Outbox Pattern、冪等性設計、

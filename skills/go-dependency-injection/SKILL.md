@@ -1,7 +1,6 @@
 ---
 name: go-dependency-injection
-description: |
-  Go 依賴注入模式與工具：Interface 設計、Constructor Pattern、Uber Fx/Wire 使用、
+description: Go 依賴注入模式與工具：Interface 設計、Constructor Pattern、Uber Fx/Wire 使用、
   測試替身模式、生命週期管理、模組化架構。
 
   **適用場景**：設計可測試的架構、使用 Fx/Wire、實作 Repository Interface、

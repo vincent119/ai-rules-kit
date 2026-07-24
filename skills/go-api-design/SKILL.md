@@ -1,7 +1,6 @@
 ---
 name: go-api-design
-description: |
-  Go API 設計與版本管理：JSON Envelope、Request/Response 模式、API Versioning、
+description: Go API 設計與版本管理：JSON Envelope、Request/Response 模式、API Versioning、
   Pagination、Filter、Sort、Swagger 文件、棄用通知、HTTP 狀態碼最佳實務。
 
   **適用場景**：設計 RESTful API、實作 API 版本控制、定義統一回應格式、分頁與篩選、

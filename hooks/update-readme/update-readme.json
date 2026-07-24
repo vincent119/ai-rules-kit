@@ -1,0 +1,13 @@
+{
+  "name": "ai-rules-kit-maintainer",
+  "description": "ai-rules-kit 專案維護 Agent：自動偵測 source/*.md 或 skills/*/SKILL.md 變更後更新 README",
+  "hooks": {
+    "postToolUse": [
+      {
+        "matcher": "fs_write",
+        "command": "node -e \"const e=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));const ops=e.tool_input?.operations||[];const p=e.tool_input?.path||'';const paths=[p,...ops.map(o=>o.path||'')].filter(Boolean);const hit=paths.some(f=>/source\\/[^/]+\\.md$/.test(f)||/skills\\/[^/]+\\/SKILL\\.md$/.test(f));if(hit){require('child_process').execSync('node '+JSON.stringify(e.cwd+'/.kiro/hooks/update-readme/script/update-readme.js'),{cwd:e.cwd,stdio:'inherit'});process.stdout.write('README.md 已自動更新。');}\"",
+        "timeout_ms": 15000
+      }
+    ]
+  }
+}

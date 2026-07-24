@@ -1,7 +1,6 @@
 ---
 name: go-ddd
-description: |
-  Go DDD 架構設計規範：領域驅動設計 (Domain-Driven Design)、Bounded Context（限界上下文）、
+description: Go DDD 架構設計規範：領域驅動設計 (Domain-Driven Design)、Bounded Context（限界上下文）、
   Aggregate Root（聚合根）、Repository Pattern、Shared Kernel（共用核心）、依賴注入整合。
 
   **適用場景**：設計微服務架構、規劃專案目錄結構、實作 DDD 分層、定義領域模型、

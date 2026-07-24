@@ -1,7 +1,6 @@
 ---
 name: go-ci-tooling
-description: |
-  Go CI/CD 工具配置：Makefile、golangci-lint、GitHub Actions、Docker、測試覆蓋率、
+description: Go CI/CD 工具配置：Makefile、golangci-lint、GitHub Actions、Docker、測試覆蓋率、
   自動化流程、Pre-commit Hook。
 
   **適用場景**：設計 CI/CD Pipeline、配置 golangci-lint、撰寫 Makefile、

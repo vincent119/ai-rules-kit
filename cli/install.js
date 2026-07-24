@@ -8,6 +8,8 @@ const os = require('os');
 const IDE_CONFIG = {
   copilot: {
     name: 'GitHub Copilot (VS Code)',
+    supportsSkills: true,
+    supportsHooks: false,
     project: {
       global: '.github/copilot-instructions.md',
       rules: '.github/instructions',
@@ -22,6 +24,8 @@ const IDE_CONFIG = {
   },
   cursor: {
     name: 'Cursor',
+    supportsSkills: false,
+    supportsHooks: false,
     project: {
       rules: '.cursor/rules',
       ext: '.mdc',
@@ -33,9 +37,12 @@ const IDE_CONFIG = {
   },
   claude: {
     name: 'Claude Code',
+    supportsSkills: false,
+    supportsHooks: true,
     project: {
       global: 'CLAUDE.md',
       rules: '.claude/rules',
+      hooks: '.claude',
       ext: '.md',
     },
     user: {
@@ -46,9 +53,13 @@ const IDE_CONFIG = {
   },
   kiro: {
     name: 'Kiro',
+    supportsSkills: true,
+    supportsHooks: true,
     project: {
       rules: '.kiro/steering',
       skills: '.kiro/skills',
+      hooks: '.kiro/hooks',
+      agents: '.kiro/agents',
       ext: '.md',
     },
     user: {
@@ -59,6 +70,8 @@ const IDE_CONFIG = {
   },
   antigravity: {
     name: 'Antigravity',
+    supportsSkills: true,
+    supportsHooks: false,
     project: {
       global: '.gemini/GEMINI.md',
       rules: '.agent/rules',
@@ -133,7 +146,11 @@ const LANG_CONFIG = {
 // ─── 參數解析 ───
 function parseArgs() {
   const args = process.argv.slice(2);
-  const opts = { ide: null, global: false, mode: null, lang: null, skills: null, extras: null, dryRun: false, help: false };
+  const opts = {
+    ide: null, global: false, mode: null, lang: null,
+    skills: null, extras: null, dryRun: false, help: false,
+    installRules: false, installSkills: false, installHooks: false,
+  };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
@@ -147,15 +164,30 @@ function parseArgs() {
       case '--antigravity': opts.ide = 'antigravity'; break;
       case '--mode': opts.mode = args[++i]; break;
       case '--lang': opts.lang = args[++i]; break;
-      case '--skills': opts.skills = args[++i]; break;
+      case '--skills': {
+        opts.installSkills = true;
+        const next = args[i + 1];
+        if (next && !next.startsWith('--')) {
+          opts.skills = next;
+          i++;
+        }
+        break;
+      }
       case '--extras': opts.extras = args[++i]; break;
+      case '--rules': opts.installRules = true; break;
+      case '--hooks': opts.installHooks = true; break;
+      case '--all': opts.installRules = true; opts.installSkills = true; opts.installHooks = true; break;
     }
   }
 
-  // 預設 lang：null（安裝全部語言）
-  if (!opts.lang) opts.lang = null;
+  // 若三個旗標都沒指定，預設全裝
+  if (!opts.installRules && !opts.installSkills && !opts.installHooks) {
+    opts.installRules = true;
+    opts.installSkills = true;
+    opts.installHooks = true;
+  }
 
-  // 預設 mode：copilot/claude 用 minimal（4KB 限制），其他用 extended
+  if (!opts.lang) opts.lang = null;
   if (!opts.mode) {
     opts.mode = (opts.ide === 'copilot' || opts.ide === 'claude') ? 'minimal' : 'extended';
   }
@@ -169,7 +201,7 @@ function showHelp() {
 ${C.blu}ai-rules-kit - AI 開發規範安裝工具${C.r}
 
 ${C.ylw}用法：${C.r}
-  npx @vincent119/ai-rules-kit --<ide> [--global] [options]
+  npx @vincent119/ai-rules-kit --<ide> [選項]
 
 ${C.ylw}IDE 選項：${C.r}
   --copilot, --vscode   GitHub Copilot (VS Code / JetBrains)
@@ -178,24 +210,30 @@ ${C.ylw}IDE 選項：${C.r}
   --kiro                Kiro
   --antigravity         Antigravity (Google)
 
+${C.ylw}安裝項目（預設全部）：${C.r}
+  --rules               只安裝語言規範
+  --skills              只安裝 Skills
+  --hooks               只安裝 Hooks（僅 kiro / claude，不支援 --global）
+  --all                 安裝全部（rules + skills + hooks）
+
 ${C.ylw}範圍：${C.r}
   (預設)                安裝到目前專案 (project level)
-  --global              安裝到使用者目錄 (user level)
+  --global              安裝到使用者目錄（hooks 不支援 global）
 
 ${C.ylw}其他選項：${C.r}
   --mode <minimal|extended>   規範版本（預設：copilot/claude=minimal, 其他=extended）
-  --lang <go|bash|rust|...>   語言規範（預設：全部，可逗號分隔指定語言）
+  --lang <go|bash|rust|...>   語言規範（預設：全部，逗號分隔）
+  --skills <names>            只安裝指定 Skills（逗號分隔）
   --extras "commit,pr"        額外規範（commit-message, pull-request）
-  --skills "go-ddd,go-grpc"   只安裝特定 skills
   --dry-run                   預覽安裝路徑，不實際寫入
   --help, -h                  顯示說明
 
 ${C.ylw}範例：${C.r}
   npx @vincent119/ai-rules-kit --kiro
-  npx @vincent119/ai-rules-kit --kiro --global
-  npx @vincent119/ai-rules-kit --copilot --mode extended
-  npx @vincent119/ai-rules-kit --cursor --lang "go,bash"
-  npx @vincent119/ai-rules-kit --cursor --skills "go-ddd,go-grpc"
+  npx @vincent119/ai-rules-kit --kiro --rules --lang "go,rust"
+  npx @vincent119/ai-rules-kit --kiro --hooks
+  npx @vincent119/ai-rules-kit --claude --hooks
+  npx @vincent119/ai-rules-kit --kiro --global --rules
 `);
 }
 
@@ -215,22 +253,34 @@ function copyRecursive(src, dest) {
   }
 }
 
-// ─── 找到 source 目錄 ───
-function findSourceDir() {
-  const candidates = [
-    path.join(__dirname, '..', 'source'),
-    path.join(__dirname, 'source'),
-  ];
-  for (const c of candidates) {
-    if (fs.existsSync(c)) return c;
+function mergeJson(destPath, newObj) {
+  let existing = {};
+  if (fs.existsSync(destPath)) {
+    try { existing = JSON.parse(fs.readFileSync(destPath, 'utf8')); } catch {}
   }
-  return null;
+  const merged = deepMerge(existing, newObj);
+  fs.writeFileSync(destPath, JSON.stringify(merged, null, 2) + '\n', 'utf8');
 }
 
-function findSkillsDir() {
+function deepMerge(target, source) {
+  const out = Object.assign({}, target);
+  for (const key of Object.keys(source)) {
+    if (Array.isArray(source[key])) {
+      out[key] = [...(target[key] || []), ...source[key]];
+    } else if (source[key] && typeof source[key] === 'object') {
+      out[key] = deepMerge(target[key] || {}, source[key]);
+    } else {
+      out[key] = source[key];
+    }
+  }
+  return out;
+}
+
+// ─── 找目錄 ───
+function findDir(name) {
   const candidates = [
-    path.join(__dirname, '..', 'skills'),
-    path.join(__dirname, 'skills'),
+    path.join(__dirname, '..', name),
+    path.join(__dirname, name),
   ];
   for (const c of candidates) {
     if (fs.existsSync(c)) return c;
@@ -250,46 +300,99 @@ function wrapFrontmatter(ide, content, type, glob) {
     case 'copilot':
       if (type === 'global') return `---\napplyTo: "**"\n---\n\n${content}`;
       return `---\napplyTo: "${glob}"\n---\n\n${content}`;
-
     case 'cursor':
       if (type === 'global') return `---\nglobs: "**/*"\nalwaysApply: true\n---\n\n${content}`;
       return `---\nglobs: "${glob}"\nalwaysApply: true\n---\n\n${content}`;
-
     case 'claude':
       return content;
-
     case 'kiro':
       if (type === 'global') return `---\ninclusion: always\n---\n\n${content}`;
       const patterns = glob.split(',').map(g => `  - '${g.trim()}'`).join('\n');
       return `---\ninclusion: always\nfilePatterns:\n${patterns}\n---\n\n${content}`;
-
     case 'antigravity':
       return content;
-
     default:
       return content;
   }
 }
 
-// ─── 產生檔名 ───
 function ruleFilename(ide, name, config) {
-  const ext = config.ext || '.md';
-  return `${name}${ext}`;
+  return `${name}${config.ext || '.md'}`;
+}
+
+// ─── 安裝 Hooks ───
+function installHooks(opts, hooksSourceDir, cwd) {
+  const ideConf = IDE_CONFIG[opts.ide];
+
+  if (!ideConf.supportsHooks) {
+    log(`  警告：${ideConf.name} 不支援 Hooks，跳過`, 'ylw');
+    return [];
+  }
+  if (opts.global) {
+    log(`  警告：Hooks 不支援 --global 安裝，跳過`, 'ylw');
+    return [];
+  }
+
+  const actions = [];
+  const hookDirs = fs.readdirSync(hooksSourceDir)
+    .filter(f => fs.statSync(path.join(hooksSourceDir, f)).isDirectory());
+
+  for (const hookName of hookDirs) {
+    const hookSrc = path.join(hooksSourceDir, hookName);
+    const files = fs.readdirSync(hookSrc);
+
+    for (const file of files) {
+      const filePath = path.join(hookSrc, file);
+      const stat = fs.statSync(filePath);
+
+      if (opts.ide === 'kiro') {
+        if (stat.isDirectory()) {
+          const dest = path.join(cwd, '.kiro', 'hooks', hookName, file);
+          actions.push({ type: 'copy', src: filePath, dest });
+          continue;
+        }
+        if (file.endsWith('.kiro.hook')) {
+          // IDE UI hook → .kiro/hooks/
+          actions.push({ type: 'copyFile', src: filePath, dest: path.join(cwd, ideConf.project.hooks, file) });
+        } else if (file.endsWith('.json') && !file.endsWith('.claude.json')) {
+          // CLI agent hook → .kiro/agents/
+          actions.push({ type: 'copyFile', src: filePath, dest: path.join(cwd, ideConf.project.agents, file) });
+        }
+      } else if (opts.ide === 'claude') {
+        if (stat.isDirectory()) {
+          const dest = path.join(cwd, '.claude', 'hooks', hookName, file);
+          actions.push({ type: 'copy', src: filePath, dest });
+          continue;
+        }
+        if (file.endsWith('.claude.json')) {
+          const hookConf = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+          actions.push({ type: 'mergeJson', dest: path.join(cwd, ideConf.project.hooks, 'settings.json'), content: hookConf });
+        }
+      }
+    }
+  }
+
+  return actions;
 }
 
 // ─── 主安裝邏輯 ───
 function install(opts) {
-  const sourceDir = findSourceDir();
-  const skillsDir = findSkillsDir();
+  const sourceDir = findDir('source');
+  const skillsDir = findDir('skills');
+  const hooksDir = findDir('hooks');
+  const cwd = process.cwd();
 
-  if (!sourceDir) {
-    log('找不到 source/ 目錄', 'red');
-    process.exit(1);
-  }
+  if (!sourceDir) { log('找不到 source/ 目錄', 'red'); process.exit(1); }
 
   const ideConf = IDE_CONFIG[opts.ide];
   const scope = opts.global ? 'user' : 'project';
   const paths = ideConf[scope];
+
+  const installParts = [
+    opts.installRules && 'rules',
+    opts.installSkills && ideConf.supportsSkills && 'skills',
+    opts.installHooks && ideConf.supportsHooks && !opts.global && 'hooks',
+  ].filter(Boolean);
 
   log('', 'r');
   log(`ai-rules-kit 安裝工具`, 'blu');
@@ -297,101 +400,105 @@ function install(opts) {
   log(`IDE:    ${ideConf.name}`, 'grn');
   log(`範圍:   ${opts.global ? 'Global (User)' : 'Project'}`, 'grn');
   log(`模式:   ${opts.mode}`, 'grn');
-  log(`語言:   ${opts.lang || '全部'}`, 'grn');
-  if (opts.skills) log(`Skills: ${opts.skills}`, 'grn');
+  log(`安裝:   ${installParts.join(', ') || '（無）'}`, 'grn');
   if (opts.dryRun) log(`[DRY RUN] 不會實際寫入檔案`, 'ylw');
   log('', 'r');
 
-  const actions = []; // { type, src, dest }
+  const actions = [];
 
-  // 1. Global 規範
-  const globalContent = readSource(sourceDir, 'global.md');
-  if (globalContent) {
-    const wrapped = wrapFrontmatter(opts.ide, globalContent, 'global', '**');
-
-    if (paths.global) {
-      const dest = opts.global ? paths.global : path.resolve(process.cwd(), paths.global);
-      actions.push({ type: 'write', dest, content: wrapped });
-    } else {
-      const rulesDir = opts.global ? paths.rules : path.resolve(process.cwd(), paths.rules);
-      const filename = ruleFilename(opts.ide, 'global', paths);
-      actions.push({ type: 'write', dest: path.join(rulesDir, filename), content: wrapped });
-    }
-  }
-
-  // 2. 語言規範（根據 --lang，未指定則安裝全部）
-  const langs = opts.lang ? opts.lang.split(',').map(l => l.trim()) : Object.keys(LANG_CONFIG);
-  for (const lang of langs) {
-    const langConf = LANG_CONFIG[lang];
-    if (!langConf) {
-      log(`  警告：不支援的語言 "${lang}"，跳過`, 'ylw');
-      continue;
-    }
-    const sourceFile = opts.mode === 'minimal' ? langConf.minimal : langConf.extended;
-    const langContent = readSource(sourceDir, sourceFile);
-    if (langContent) {
-      const wrapped = wrapFrontmatter(opts.ide, langContent, 'lang', langConf.glob);
-      const rulesDir = opts.global ? paths.rules : path.resolve(process.cwd(), paths.rules);
-      const filename = ruleFilename(opts.ide, lang, paths);
-      actions.push({ type: 'write', dest: path.join(rulesDir, filename), content: wrapped });
-    }
-  }
-
-  // 3. Extras（commit-message, pull-request）
-  if (opts.extras) {
-    const EXTRAS_MAP = {
-      commit: { file: 'commit-message.md', name: 'commit-message' },
-      pr: { file: 'pull-request.md', name: 'pull-request' },
-    };
-    const extraList = opts.extras.split(',').map(e => e.trim());
-    for (const extra of extraList) {
-      const conf = EXTRAS_MAP[extra];
-      if (!conf) {
-        log(`  警告：不支援的 extra "${extra}"，跳過`, 'ylw');
-        continue;
+  // ── Rules ──
+  if (opts.installRules) {
+    // Global 規範
+    const globalContent = readSource(sourceDir, 'global.md');
+    if (globalContent) {
+      const wrapped = wrapFrontmatter(opts.ide, globalContent, 'global', '**');
+      if (paths.global) {
+        const dest = opts.global ? paths.global : path.resolve(cwd, paths.global);
+        actions.push({ type: 'write', dest, content: wrapped });
+      } else {
+        const rulesDir = opts.global ? paths.rules : path.resolve(cwd, paths.rules);
+        actions.push({ type: 'write', dest: path.join(rulesDir, ruleFilename(opts.ide, 'global', paths)), content: wrapped });
       }
-      const content = readSource(sourceDir, conf.file);
+    }
+
+    // 語言規範
+    const langs = opts.lang ? opts.lang.split(',').map(l => l.trim()) : Object.keys(LANG_CONFIG);
+    for (const lang of langs) {
+      const langConf = LANG_CONFIG[lang];
+      if (!langConf) { log(`  警告：不支援的語言 "${lang}"，跳過`, 'ylw'); continue; }
+      const content = readSource(sourceDir, opts.mode === 'minimal' ? langConf.minimal : langConf.extended);
       if (content) {
-        const wrapped = wrapFrontmatter(opts.ide, content, 'global', '**');
-        const rulesDir = opts.global ? paths.rules : path.resolve(process.cwd(), paths.rules);
-        const filename = ruleFilename(opts.ide, conf.name, paths);
-        actions.push({ type: 'write', dest: path.join(rulesDir, filename), content: wrapped });
+        const wrapped = wrapFrontmatter(opts.ide, content, 'lang', langConf.glob);
+        const rulesDir = opts.global ? paths.rules : path.resolve(cwd, paths.rules);
+        actions.push({ type: 'write', dest: path.join(rulesDir, ruleFilename(opts.ide, lang, paths)), content: wrapped });
+      }
+    }
+
+    // Extras
+    if (opts.extras) {
+      const EXTRAS_MAP = {
+        commit: { file: 'commit-message.md', name: 'commit-message' },
+        pr: { file: 'pull-request.md', name: 'pull-request' },
+      };
+      for (const extra of opts.extras.split(',').map(e => e.trim())) {
+        const conf = EXTRAS_MAP[extra];
+        if (!conf) { log(`  警告：不支援的 extra "${extra}"，跳過`, 'ylw'); continue; }
+        const content = readSource(sourceDir, conf.file);
+        if (content) {
+          const wrapped = wrapFrontmatter(opts.ide, content, 'global', '**');
+          const rulesDir = opts.global ? paths.rules : path.resolve(cwd, paths.rules);
+          actions.push({ type: 'write', dest: path.join(rulesDir, ruleFilename(opts.ide, conf.name, paths)), content: wrapped });
+        }
+      }
+    }
+
+    // Kiro 專屬規範
+    if (opts.ide === 'kiro') {
+      for (const filename of ['kiro-specs.md']) {
+        const content = readSource(sourceDir, filename);
+        if (content) {
+          const wrapped = wrapFrontmatter(opts.ide, content, 'global', '**');
+          const rulesDir = opts.global ? paths.rules : path.resolve(cwd, paths.rules);
+          actions.push({ type: 'write', dest: path.join(rulesDir, filename.replace(/\.md$/, '') + paths.ext), content: wrapped });
+        }
       }
     }
   }
 
-  // 4. Skills（僅支援 kiro / antigravity）
-  if (skillsDir && paths.skills) {
-    const skillsDest = opts.global ? paths.skills : path.resolve(process.cwd(), paths.skills);
-    let skillList = fs.readdirSync(skillsDir).filter(f =>
-      fs.statSync(path.join(skillsDir, f)).isDirectory()
-    );
-
-    // 篩選指定 skills
+  // ── Skills ──
+  if (opts.installSkills && skillsDir && paths.skills) {
+    const skillsDest = opts.global ? paths.skills : path.resolve(cwd, paths.skills);
+    let skillList = fs.readdirSync(skillsDir).filter(f => fs.statSync(path.join(skillsDir, f)).isDirectory());
     if (opts.skills) {
       const selected = opts.skills.split(',').map(s => s.trim());
       skillList = skillList.filter(s => selected.includes(s));
     }
-
     for (const skill of skillList) {
       actions.push({ type: 'copy', src: path.join(skillsDir, skill), dest: path.join(skillsDest, skill) });
     }
   }
 
-  // 執行
+  // ── Hooks ──
+  if (opts.installHooks && hooksDir) {
+    const hookActions = installHooks(opts, hooksDir, cwd);
+    actions.push(...hookActions);
+  }
+
+  // ── 執行 ──
   log('安裝項目：', 'cyn');
   for (const action of actions) {
     if (action.type === 'write') {
       log(`  寫入 ${action.dest}`, 'r');
-      if (!opts.dryRun) {
-        mkdirp(path.dirname(action.dest));
-        fs.writeFileSync(action.dest, action.content, 'utf8');
-      }
+      if (!opts.dryRun) { mkdirp(path.dirname(action.dest)); fs.writeFileSync(action.dest, action.content, 'utf8'); }
+    } else if (action.type === 'copyFile') {
+      log(`  複製 ${path.basename(action.src)} -> ${action.dest}`, 'r');
+      if (!opts.dryRun) { mkdirp(path.dirname(action.dest)); fs.copyFileSync(action.src, action.dest); }
     } else if (action.type === 'copy') {
       log(`  複製 ${path.basename(action.src)}/ -> ${action.dest}`, 'r');
-      if (!opts.dryRun) {
-        copyRecursive(action.src, action.dest);
-      }
+      if (!opts.dryRun) { copyRecursive(action.src, action.dest); }
+    } else if (action.type === 'mergeJson') {
+      log(`  合併 -> ${action.dest}`, 'r');
+      if (!opts.dryRun) { mkdirp(path.dirname(action.dest)); mergeJson(action.dest, action.content); }
     }
   }
 
@@ -412,11 +519,9 @@ function showLangList() {
 }
 
 function showSkillList() {
-  const skillsDir = findSkillsDir();
+  const skillsDir = findDir('skills');
   if (!skillsDir) { log('找不到 skills/ 目錄', 'red'); return; }
-  const skills = fs.readdirSync(skillsDir)
-    .filter(f => fs.statSync(path.join(skillsDir, f)).isDirectory())
-    .sort();
+  const skills = fs.readdirSync(skillsDir).filter(f => fs.statSync(path.join(skillsDir, f)).isDirectory()).sort();
   log(`支援的 Skills（共 ${skills.length} 個）：`, 'blu');
   for (const s of skills) { log(`  ${s}`, 'r'); }
 }

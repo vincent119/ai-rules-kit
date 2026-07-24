@@ -1,7 +1,6 @@
 ---
 name: go-observability
-description: |
-  Go 可觀測性規範：結構化日誌（zap/slog）、Prometheus Metrics 規範、OpenTelemetry 整合、
+description: Go 可觀測性規範：結構化日誌（zap/slog）、Prometheus Metrics 規範、OpenTelemetry 整合、
   Context 傳遞與 Trace ID 串接、日誌等級管理、Metrics 命名慣例。
 
   **適用場景**：實作結構化日誌、設計 Prometheus Metrics、整合 OpenTelemetry Tracing、

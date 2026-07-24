@@ -1,7 +1,6 @@
 ---
 name: go-testing-advanced
-description: |
-  Go 進階測試策略：Table-driven tests 進階模式、Mocking 策略（uber-go/mock）、
+description: Go 進階測試策略：Table-driven tests 進階模式、Mocking 策略（uber-go/mock）、
   整合測試設計、Benchmark 與 Fuzz testing、測試覆蓋率要求、測試金字塔原則。
 
   **適用場景**：撰寫單元測試、設計 Mock、實作整合測試、效能測試（Benchmark）、

@@ -1,7 +1,6 @@
 ---
 name: go-configuration
-description: |
-  Go 設定管理最佳實務：Viper 配置、環境變數優先級、Secrets 處理、設定驗證、
+description: Go 設定管理最佳實務：Viper 配置、環境變數優先級、Secrets 處理、設定驗證、
   動態重載、多環境管理、12-Factor App 原則。
 
   **適用場景**：使用 Viper、環境變數管理、Secrets 處理、設定驗證、動態重載設定、

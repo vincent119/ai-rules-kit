@@ -1,7 +1,6 @@
 ---
 name: go-database
-description: |
-  Go Database Migration 與 ORM 規範：Migration 工具選擇（golang-migrate/goose）、
+description: Go Database Migration 與 ORM 規範：Migration 工具選擇（golang-migrate/goose）、
   命名慣例、版本控制、CI/CD 整合、最佳實務（pt-online-schema-change, gh-ost）。
 
   **適用場景**：設計資料庫遷移策略、實作 Migration、管理 Schema 版本、處理大型表變更、

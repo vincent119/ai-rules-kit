@@ -1,7 +1,6 @@
 ---
 name: go-examples
-description: |
-  Go 實作範例庫：完整的 HTTP Client、Repository Pattern、Use Case、Handler、
+description: Go 實作範例庫：完整的 HTTP Client、Repository Pattern、Use Case、Handler、
   Service 實作範例，涵蓋常見場景的最佳實務程式碼。
 
   **適用場景**：參考完整實作範例、學習最佳實務、快速啟動新專案、程式碼審查參考、

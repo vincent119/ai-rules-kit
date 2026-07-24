@@ -1,7 +1,6 @@
 ---
 name: go-graceful-shutdown
-description: |
-  Go 優雅關機（Graceful Shutdown）模式：Signal 處理、HTTP Server shutdown、gRPC GracefulStop、
+description: Go 優雅關機（Graceful Shutdown）模式：Signal 處理、HTTP Server shutdown、gRPC GracefulStop、
   Worker/Consumer 停止、Kubernetes 整合、Context 取消機制、資源清理流程。
 
   **適用場景**：實作 HTTP Server 優雅關機、gRPC Server 停止、Background Worker 終止、
