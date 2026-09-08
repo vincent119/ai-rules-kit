@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-09-08
+
+### ✨ Added
+- React skills 新增 one-time code／OTP input 指引，涵蓋受控與非受控 API、貼上、SMS autofill、鍵盤導覽、錯誤 ARIA 與 reduced motion。
+- 新增 `useOneTimeCode` 狀態模式，處理完整 code、驗證去重、錯誤與重設，並保留重送與驗證 transport 給外層流程管理。
+
 ## [1.1.0] - 2026-09-08
 
 ### ✨ Added
