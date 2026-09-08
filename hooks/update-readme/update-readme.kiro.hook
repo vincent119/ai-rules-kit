@@ -2,12 +2,12 @@
   "version": "1.0.0",
   "enabled": true,
   "name": "update-readme",
-  "description": "偵測 source/*.md 或 skills/*/SKILL.md 被儲存後，自動執行腳本更新 README",
+  "description": "偵測 source/*.md 或 skills/**/SKILL.md 被儲存後，自動執行腳本更新 README",
   "when": {
     "type": "fileEdited",
     "patterns": [
       "source/*.md",
-      "skills/*/SKILL.md"
+      "skills/**/SKILL.md"
     ]
   },
   "then": {

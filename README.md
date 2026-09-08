@@ -65,7 +65,7 @@ npx @vincent119/ai-rules-kit --copilot --global
 npx @vincent119/ai-rules-kit --codex --skills
 
 # 更新指定 Skills
-npx @vincent119/ai-rules-kit --codex --skills "sdd-skill,go-ddd"
+npx @vincent119/ai-rules-kit --codex --skills "engineering/agent-development/sdd-skill,programming/go/go-ddd"
 ```
 
 更新前可先使用 `--dry-run` 檢查寫入路徑：
@@ -121,97 +121,99 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 
 ## Skills 清單
 
-### Financial
+### Documentation
 
-| Skill 名稱 | 說明 |
-|------------|------|
-| `financial-health-risk` | 財務健康風險分析完整流程。 |
+| Skill ID | 說明 |
+|----------|------|
+| `documentation/changelog-generator` | Transform Git commits into user-facing changelogs. |
+| `documentation/readme` | 建立、改善或稽核 GitHub 專案的 README。 |
+| `documentation/technical-writing` | 建立、改善或稽核 README 以外的技術文件，例如架構文件、操作手冊、教學、ADR 與概念說明。 |
 
-### Go
+### Programming
 
-| Skill 名稱 | 說明 |
-|------------|------|
-| `go-api-design` | Go API 設計與版本管理：JSON Envelope、Request/Response 模式、API Versioning、 Pagination、Filter、Sort、Swagger 文件、棄用通知、HTTP 狀態碼最佳實務。 |
-| `go-ci-tooling` | Go CI/CD 工具配置：Makefile、golangci-lint、GitHub Actions、Docker、測試覆蓋率、 自動化流程、Pre-commit Hook。 |
-| `go-configuration` | Go 設定管理最佳實務：Viper 配置、環境變數優先級、Secrets 處理、設定驗證、 動態重載、多環境管理、12-Factor App 原則。 |
-| `go-database` | Go Database Migration 與 ORM 規範：Migration 工具選擇（golang-migrate/goose）、 命名慣例、版本控制、CI/CD 整合、最佳實務（pt-online-schema-change, gh-ost）。 |
-| `go-ddd` | Go DDD 架構設計規範：領域驅動設計 (Domain-Driven Design)、Bounded Context（限界上下文）、 Aggregate Root（聚合根）、Repository Pattern、Shared Kernel（共用核心）、依賴注入整合。 |
-| `go-dependency-injection` | Go 依賴注入模式與工具：Interface 設計、Constructor Pattern、Uber Fx/Wire 使用、 測試替身模式、生命週期管理、模組化架構。 |
-| `go-domain-events` | Go Domain Events 實作：事件定義、發布模式、Event Bus、Outbox Pattern、冪等處理、 Event Sourcing 基礎、非同步處理。 |
-| `go-examples` | Go 實作範例庫：完整的 HTTP Client、Repository Pattern、Use Case、Handler、 Service 實作範例，涵蓋常見場景的最佳實務程式碼。 |
-| `go-graceful-shutdown` | Go 優雅關機（Graceful Shutdown）模式：Signal 處理、HTTP Server shutdown、gRPC GracefulStop、 Worker/Consumer 停止、Kubernetes 整合、Context 取消機制、資源清理流程。 |
-| `go-grpc` | Go gRPC 完整實作規範：Proto 檔案管理、Buf 使用、Interceptor 設計、健康檢查協議、 Deadline 與 Context 處理、錯誤代碼映射、優雅關機（GracefulStop）。 |
-| `go-http-advanced` | Go HTTP 進階實作：Transport 重用與配置、重試策略與指數退避、Body 重播機制、 Multipart 上傳、逾時控制、HTTP Client 最佳實務、Context 傳遞。 |
-| `go-observability` | Go 可觀測性規範：結構化日誌（zap/slog）、Prometheus Metrics 規範、OpenTelemetry 整合、 Context 傳遞與 Trace ID 串接、日誌等級管理、Metrics 命名慣例。 |
-| `go-testing-advanced` | Go 進階測試策略：Table-driven tests 進階模式、Mocking 策略（uber-go/mock）、 整合測試設計、Benchmark 與 Fuzz testing、測試覆蓋率要求、測試金字塔原則。 |
+| Skill ID | 說明 |
+|----------|------|
+| `programming/go/go-api-design` | Go API 設計與版本管理：JSON Envelope、Request/Response 模式、API Versioning、 |
+| `programming/go/go-ci-tooling` | Go CI/CD 工具配置：Makefile、golangci-lint、GitHub Actions、Docker、測試覆蓋率、 |
+| `programming/go/go-configuration` | Go 設定管理最佳實務：Viper 配置、環境變數優先級、Secrets 處理、設定驗證、 |
+| `programming/go/go-database` | Go Database Migration 與 ORM 規範：Migration 工具選擇（golang-migrate/goose）、 |
+| `programming/go/go-ddd` | Go DDD 架構設計規範：領域驅動設計 (Domain-Driven Design)、Bounded Context（限界上下文）、 |
+| `programming/go/go-dependency-injection` | Go 依賴注入模式與工具：Interface 設計、Constructor Pattern、Uber Fx/Wire 使用、 |
+| `programming/go/go-domain-events` | Go Domain Events 實作：事件定義、發布模式、Event Bus、Outbox Pattern、冪等處理、 |
+| `programming/go/go-examples` | Go 實作範例庫：完整的 HTTP Client、Repository Pattern、Use Case、Handler、 |
+| `programming/go/go-graceful-shutdown` | Go 優雅關機（Graceful Shutdown）模式：Signal 處理、HTTP Server shutdown、gRPC GracefulStop、 |
+| `programming/go/go-grpc` | Go gRPC 完整實作規範：Proto 檔案管理、Buf 使用、Interceptor 設計、健康檢查協議、 Deadline 與 Context 處理、錯誤代碼映射、優雅關機（GracefulStop）。 |
+| `programming/go/go-http-advanced` | Go HTTP 進階實作：Transport 重用與配置、重試策略與指數退避、Body 重播機制、 |
+| `programming/go/go-observability` | Go 可觀測性規範：結構化日誌（zap/slog）、Prometheus Metrics 規範、OpenTelemetry 整合、 |
+| `programming/go/go-testing-advanced` | Go 進階測試策略：Table-driven tests 進階模式、Mocking 策略（uber-go/mock）、 |
+| `programming/rust/rust-api-design` | Rust API 設計模式。 |
+| `programming/rust/rust-async-concurrency` | Rust 非同步與並行模式。 |
+| `programming/rust/rust-error-handling` | Rust 錯誤處理模式。 |
+| `programming/rust/rust-project-structure` | Rust 專案目錄結構。 |
+| `programming/rust/rust-safety-performance` | Rust 安全性與效能最佳實踐。 |
+| `programming/rust/rust-testing` | Rust 測試策略。 |
 
-### Rust
+### Frontend
 
-| Skill 名稱 | 說明 |
-|------------|------|
-| `rust-api-design` | Rust API 設計模式。 |
-| `rust-async-concurrency` | Rust 非同步與並行模式。 |
-| `rust-error-handling` | Rust 錯誤處理模式。 |
-| `rust-project-structure` | Rust 專案目錄結構。 |
-| `rust-safety-performance` | Rust 安全性與效能最佳實踐。 |
-| `rust-testing` | Rust 測試策略。 |
+| Skill ID | 說明 |
+|----------|------|
+| `frontend/react/react-component-patterns` | React 元件設計模式。 |
+| `frontend/react/react-hooks-state` | React Hooks 與狀態管理模式。 |
+| `frontend/react/react-performance` | React 效能最佳化模式。 |
+| `frontend/react/react-project-structure` | React 專案目錄結構。 |
 
-### React
+### Infrastructure
 
-| Skill 名稱 | 說明 |
-|------------|------|
-| `react-component-patterns` | React 元件設計模式。 |
-| `react-hooks-state` | React Hooks 與狀態管理模式。 |
-| `react-performance` | React 效能最佳化模式。 |
-| `react-project-structure` | React 專案目錄結構。 |
+| Skill ID | 說明 |
+|----------|------|
+| `infrastructure/aws/eks-ami` | 查詢 Amazon EKS 專用 AMI (AL2023 x86_64)。 |
+| `infrastructure/devops/devops-cicd-pipeline` | CI/CD Pipeline 設計、建置、監控與最佳化完整流程。 |
+| `infrastructure/devops/devops-deployment-strategies` | 部署策略目錄。 |
+| `infrastructure/devops/devops-pipeline-security-gates` | CI/CD Pipeline 安全閘門設計指南。 |
+| `infrastructure/devops/devops-runbooks` | Operational runbook and procedure documentation specialist. |
+| `infrastructure/kubernetes/debug` | Kubernetes troubleshooting workflow - Pod status, logs, events, exec, and resource monitoring. |
+| `infrastructure/sre/sre-cicd-pipeline` | CI/CD Pipeline 文件產生器。 |
+| `infrastructure/sre/sre-documentation-generation` | SRE 文件產生器。 |
+| `infrastructure/sre/sre-incident-postmortem` | 事故事後分析（Postmortem）完整流程。 |
+| `infrastructure/sre/sre-rca-methodology` | 根因分析（RCA）方法論詳細指南。 |
+| `infrastructure/sre/sre-sla-impact-calculator` | 基於 SLA/SLO 量化評估事故影響的計算模型與業務影響矩陣。 |
+| `infrastructure/sre/sre-vpc-architecture` | AWS VPC 架構文件產生器。 |
 
-### Dev
+### Engineering
 
-| Skill 名稱 | 說明 |
-|------------|------|
-| `dev-code-reviewer` | 自動化程式碼審查完整流程。 |
-| `dev-refactoring-catalog` | 程式碼重構目錄。 |
-| `dev-vulnerability-patterns` | 程式碼漏洞模式資料庫。 |
+| Skill ID | 說明 |
+|----------|------|
+| `engineering/agent-development/sdd-skill` | SDD（Spec Driven Development）工作流程。 |
+| `engineering/agent-development/skill-creator` | Guide for creating effective skills. |
+| `engineering/code-quality/dev-code-reviewer` | 自動化程式碼審查完整流程。 |
+| `engineering/code-quality/dev-refactoring-catalog` | 程式碼重構目錄。 |
+| `engineering/security/dev-vulnerability-patterns` | 程式碼漏洞模式資料庫。 |
+| `engineering/testing/test-coverage` | Run tests with coverage reports for Go, Python, and Node. |
+| `engineering/workflow/git-repo-init` | Git repo 初始化範本產生器。 |
+| `engineering/workflow/release-workflow` | Standard release workflow - Test, tag, push. |
 
-### SRE / DevOps
+### Design
 
-| Skill 名稱 | 說明 |
-|------------|------|
-| `aws-eks-ami` | 查詢 Amazon EKS 專用 AMI (AL2023 x86_64)。 |
-| `devops-cicd-pipeline` | CI/CD Pipeline 設計、建置、監控與最佳化完整流程。 |
-| `devops-deployment-strategies` | 部署策略目錄。 |
-| `devops-pipeline-security-gates` | CI/CD Pipeline 安全閘門設計指南。 |
-| `devops-runbooks` | Operational runbook and procedure documentation specialist. |
-| `k8s-debug` | Kubernetes troubleshooting workflow - Pod status, logs, events, exec, and resource monitoring. |
-| `release-workflow` | Standard release workflow - Test, tag, push. |
-| `sre-cicd-pipeline` | CI/CD Pipeline 文件產生器。 |
-| `sre-documentation-generation` | SRE 文件產生器。 |
-| `sre-incident-postmortem` | 事故事後分析（Postmortem）完整流程。 |
-| `sre-rca-methodology` | 根因分析（RCA）方法論詳細指南。 |
-| `sre-sla-impact-calculator` | 基於 SLA/SLO 量化評估事故影響的計算模型與業務影響矩陣。 |
-| `sre-vpc-architecture` | AWS VPC 架構文件產生器。 |
+| Skill ID | 說明 |
+|----------|------|
+| `design/presentation/pres-data-visualization-guide` | 資料視覺化圖表選擇指南與資訊架構設計。 |
+| `design/presentation/pres-presentation-designer` | 簡報設計完整製作流程。 |
+| `design/presentation/pres-slide-layout-patterns` | 投影片版面模式庫。 |
+| `design/ui/ui-component-guidelines` | UI 元件設計規範。 |
+| `design/ui/ui-design-principles` | UI 設計原則。 |
+| `design/ui/ui-design-tokens` | Design Token 管理。 |
 
-### Presentation
+### Business
 
-| Skill 名稱 | 說明 |
-|------------|------|
-| `pres-data-visualization-guide` | 資料視覺化圖表選擇指南與資訊架構設計。 |
-| `pres-presentation-designer` | 簡報設計完整製作流程。 |
-| `pres-slide-layout-patterns` | 投影片版面模式庫。 |
+| Skill ID | 說明 |
+|----------|------|
+| `business/financial-health-risk` | 財務健康風險分析完整流程。 |
 
-### 通用
+### Productivity
 
-| Skill 名稱 | 說明 |
-|------------|------|
-| `changelog-generator` | Transform Git commits into user-facing changelogs. |
-| `git-repo-init` | Git repo 初始化範本產生器。 |
-| `meeting-transcriber` | 會議錄音轉會議紀要。 |
-| `sdd-skill` | SDD（Spec Driven Development）工作流程，供 Codex 與其他 agent 在實作前建立 `.specs` 規格文件。 |
-| `skill-creator` | Guide for creating effective skills. |
-| `test-coverage` | Run tests with coverage reports for Go, Python, and Node. |
-| `ui-component-guidelines` | UI 元件設計規範。 |
-| `ui-design-principles` | UI 設計原則。 |
-| `ui-design-tokens` | Design Token 管理。 |
+| Skill ID | 說明 |
+|----------|------|
+| `productivity/meeting-transcriber` | 會議錄音轉會議紀要。 |
 
 ## CLI 參考
 
@@ -248,10 +250,18 @@ npx @vincent119/ai-rules-kit --<ide> [選項]
 | `--global` | `false` | 安裝到使用者目錄（全域），而非專案目錄（hooks 不支援 global） |
 | `--mode <minimal\|extended>` | copilot/claude/codex: `minimal`，其他: `extended` | 規範版本 |
 | `--lang <languages>` | 全部 | 語言規範，逗號分隔指定語言 |
-| `--skills <names>` | 全部 | 只安裝指定的 Skills，逗號分隔 |
+| `--skills <names>` | 全部 | 只安裝指定的 Skills，逗號分隔，可用完整 Skill ID 或唯一短名稱 |
 | `--extras <names>` | 無 | 額外規範：`commit`（Commit Message）、`pr`（Pull Request） |
 | `--dry-run` | `false` | 預覽安裝路徑，不實際寫入檔案 |
 | `--help` / `-h` | - | 顯示說明 |
+
+### Skill ID 與目錄轉換
+
+Skills 在來源 Repository 依領域分類。直接包含 `SKILL.md` 的目錄是一個 skill，並以從 `skills/` 起算的相對路徑作為 Skill ID，例如 `programming/go/go-grpc`。
+
+`--skills` 可指定完整 Skill ID；舊的短名稱僅在全域唯一時仍可使用。若短名稱重複，CLI 會列出可使用的完整 ID。
+
+安裝時，Codex 保留來源階層；Copilot、Kiro 與 Antigravity 使用完整 ID 的連字號版本，例如 `programming/go/go-grpc` 轉為 `programming-go-go-grpc`。
 
 ## 安裝範圍
 
@@ -294,23 +304,23 @@ Draft 目錄格式為：
 
 | IDE | 全域規範 | 語言規範 | Skills | Hooks |
 |-----|---------|---------|--------|-------|
-| Copilot | `.github/copilot-instructions.md` | `.github/instructions/<lang>.instructions.md` | `.github/skills/<name>/` | - |
+| Copilot | `.github/copilot-instructions.md` | `.github/instructions/<lang>.instructions.md` | `.github/skills/<flattened-id>/` | - |
 | Cursor | - | `.cursor/rules/<lang>.mdc` | - | - |
 | Claude Code | `CLAUDE.md` | `.claude/rules/<lang>.md` | - | `.claude/settings.json` |
-| Codex | `AGENTS.md` | `.codex/rules/<lang>.md` | `.codex/skills/<name>/` | - |
-| Kiro | - | `.kiro/steering/<lang>.md` | `.kiro/skills/<name>/` | `.kiro/hooks/` + `.kiro/agents/` |
-| Antigravity | `.gemini/GEMINI.md` | `.agent/rules/<lang>.md` | `.agent/skills/<name>/` | - |
+| Codex | `AGENTS.md` | `.codex/rules/<lang>.md` | `.codex/skills/<canonical-id>/` | - |
+| Kiro | - | `.kiro/steering/<lang>.md` | `.kiro/skills/<flattened-id>/` | `.kiro/hooks/` + `.kiro/agents/` |
+| Antigravity | `.gemini/GEMINI.md` | `.agent/rules/<lang>.md` | `.agent/skills/<flattened-id>/` | - |
 
 ### 使用者層級（`--global`）
 
 | IDE | 全域規範 | 語言規範 | Skills |
 |-----|---------|---------|--------|
-| Copilot | - | `~/.copilot/instructions/<lang>.instructions.md` | `~/.copilot/skills/<name>/` |
+| Copilot | - | `~/.copilot/instructions/<lang>.instructions.md` | `~/.copilot/skills/<flattened-id>/` |
 | Cursor | - | `~/.cursor/rules/<lang>.mdc` | - |
 | Claude Code | `~/.claude/CLAUDE.md` | `~/.claude/rules/<lang>.md` | - |
-| Codex | `~/.codex/AGENTS.md` | `~/.codex/rules/<lang>.md` | `~/.codex/skills/<name>/` |
-| Kiro | - | `~/.kiro/steering/<lang>.md` | `~/.kiro/skills/<name>/` |
-| Antigravity | `~/.gemini/GEMINI.md` | `~/.agent/rules/<lang>.md` | `~/.agent/skills/<name>/` |
+| Codex | `~/.codex/AGENTS.md` | `~/.codex/rules/<lang>.md` | `~/.codex/skills/<canonical-id>/` |
+| Kiro | - | `~/.kiro/steering/<lang>.md` | `~/.kiro/skills/<flattened-id>/` |
+| Antigravity | `~/.gemini/GEMINI.md` | `~/.agent/rules/<lang>.md` | `~/.agent/skills/<flattened-id>/` |
 
 ## 使用範例
 
@@ -354,7 +364,7 @@ npx @vincent119/ai-rules-kit --cursor --lang "go,bash,rust"
 
 ```bash
 # 只安裝 DDD 與 gRPC 相關 Skills
-npx @vincent119/ai-rules-kit --kiro --skills "go-ddd,go-grpc"
+npx @vincent119/ai-rules-kit --kiro --skills "programming/go/go-ddd,programming/go/go-grpc"
 ```
 
 ### 加入額外規範
@@ -399,12 +409,19 @@ ai-rules-kit/
 │   ├── kiro-specs.md        # Specs 共用規範
 │   ├── commit-message.md    # Commit Message 規範
 │   └── pull-request.md      # Pull Request 規範
-├── skills/                  # 領域 Skills
-│   ├── go-ddd/
-│   ├── go-grpc/
-│   ├── rust-error-handling/
-│   ├── sre-vpc-architecture/
-│   └── ...（共 52 個）
+├── skills/                  # Skill 原始碼，依領域分類
+│   ├── documentation/
+│   │   └── changelog-generator/
+│   ├── backend/
+│   │   ├── go/
+│   │   │   └── go-grpc/
+│   │   └── rust/
+│   ├── infrastructure/
+│   │   ├── devops/
+│   │   └── sre/
+│   ├── engineering/
+│   ├── design/
+│   └── ...（共 52 個 Skills）
 ├── hooks/                   # Hooks（Kiro / Claude Code）
 │   └── update-readme/
 │       ├── update-readme.kiro.hook      # Kiro IDE UI hook
@@ -431,7 +448,7 @@ ai-rules-kit/
 
 ### 新增 Skill
 
-在 `skills/` 目錄下建立新資料夾，包含 `SKILL.md` 檔案。可參考 `skill-creator` Skill 的指南。
+在 `skills/<領域>/<skill>/` 下建立資料夾，並放入 `SKILL.md`。直接包含 `SKILL.md` 的資料夾會被視為一個 skill；可參考 `engineering/agent-development/skill-creator` 的指南。
 
 ### 新增 Hook
 
@@ -462,7 +479,7 @@ Hooks 是自動化工作流程，當特定事件發生時（如檔案儲存、�
 
 #### update-readme
 
-自動偵測 `source/*.md` 或 `skills/*/SKILL.md` 被修改後，執行 `update-readme.js` 腳本更新 README 的語言規範表格與 Skills 清單。
+自動偵測 `source/*.md` 或 `skills/` 下任意層的 `SKILL.md` 被修改後，執行 `update-readme.js` 腳本更新 README 的語言規範表格與 Skills 清單。
 
 **觸發時機**：
 - Kiro IDE：檔案儲存時（`fileEdited`）
@@ -477,7 +494,7 @@ npx @vincent119/ai-rules-kit --claude --hooks
 
 ### 新增 Skill
 
-在 `skills/` 目錄下建立新資料夾，包含 `SKILL.md` 檔案。可參考 `skill-creator` Skill 的指南。
+在 `skills/<領域>/<skill>/` 下建立資料夾，並放入 `SKILL.md`。可參考 `engineering/agent-development/skill-creator` 的指南。
 
 ## 授權
 

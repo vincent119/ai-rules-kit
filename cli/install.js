@@ -9,6 +9,7 @@ const IDE_CONFIG = {
   copilot: {
     name: 'GitHub Copilot (VS Code)',
     supportsSkills: true,
+    skillLayout: 'flatten',
     supportsHooks: false,
     project: {
       global: '.github/copilot-instructions.md',
@@ -54,6 +55,7 @@ const IDE_CONFIG = {
   codex: {
     name: 'Codex',
     supportsSkills: true,
+    skillLayout: 'preserve',
     supportsHooks: false,
     project: {
       global: 'AGENTS.md',
@@ -71,6 +73,7 @@ const IDE_CONFIG = {
   kiro: {
     name: 'Kiro',
     supportsSkills: true,
+    skillLayout: 'flatten',
     supportsHooks: true,
     project: {
       rules: '.kiro/steering',
@@ -88,6 +91,7 @@ const IDE_CONFIG = {
   antigravity: {
     name: 'Antigravity',
     supportsSkills: true,
+    skillLayout: 'flatten',
     supportsHooks: false,
     project: {
       global: '.gemini/GEMINI.md',
@@ -271,6 +275,88 @@ function copyRecursive(src, dest) {
   } else {
     fs.copyFileSync(src, dest);
   }
+}
+
+// 來源資料夾可依領域分層；直接含有 SKILL.md 的資料夾才是 skill 根目錄。
+function discoverSkills(skillsDir) {
+  const skills = [];
+
+  function visit(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    if (entries.some(entry => entry.isFile() && entry.name === 'SKILL.md')) {
+      const id = path.relative(skillsDir, dir).split(path.sep).join('/');
+      skills.push({ id, name: path.basename(dir), sourceDir: dir });
+      return;
+    }
+
+    for (const entry of entries) {
+      if (entry.isDirectory()) visit(path.join(dir, entry.name));
+    }
+  }
+
+  visit(skillsDir);
+  return skills.sort((a, b) => a.id.localeCompare(b.id));
+}
+
+// 保留分類搬遷前的公開選取名稱，避免既有安裝指令失效。
+const LEGACY_SKILL_IDS = {
+  'aws-eks-ami': 'infrastructure/aws/eks-ami',
+  'k8s-debug': 'infrastructure/kubernetes/debug',
+};
+
+function resolveSelectedSkills(skills, requested) {
+  if (!requested) return skills;
+
+  const selected = [];
+  for (const value of requested.split(',').map(item => item.trim()).filter(Boolean)) {
+    const byId = skills.find(skill => skill.id === value);
+    if (byId) {
+      selected.push(byId);
+      continue;
+    }
+
+    const legacyId = LEGACY_SKILL_IDS[value];
+    if (legacyId) {
+      const legacySkill = skills.find(skill => skill.id === legacyId);
+      if (legacySkill) {
+        selected.push(legacySkill);
+        continue;
+      }
+    }
+
+    const byName = skills.filter(skill => skill.name === value);
+    if (byName.length === 1) {
+      selected.push(byName[0]);
+      continue;
+    }
+
+    if (byName.length > 1) {
+      throw new Error(`Skill 名稱 "${value}" 不明確，請改用完整 ID：${byName.map(skill => skill.id).join(', ')}`);
+    }
+
+    throw new Error(`找不到 Skill "${value}"。可使用 --skills list 查看完整 ID。`);
+  }
+
+  return [...new Map(selected.map(skill => [skill.id, skill])).values()];
+}
+
+function skillDestination(skillsDest, skill, layout) {
+  if (layout === 'preserve') return path.join(skillsDest, ...skill.id.split('/'));
+  if (layout === 'flatten') return path.join(skillsDest, skill.id.split('/').join('-'));
+  throw new Error(`不支援的 Skill 目錄策略：${layout}`);
+}
+
+function ensureUniqueSkillDestinations(skills, skillsDest, layout) {
+  const destinations = new Map();
+  for (const skill of skills) {
+    const dest = skillDestination(skillsDest, skill, layout);
+    const existing = destinations.get(dest);
+    if (existing && existing.id !== skill.id) {
+      throw new Error(`Skill 輸出目錄衝突：${existing.id} 與 ${skill.id} 都會寫入 ${dest}`);
+    }
+    destinations.set(dest, skill);
+  }
+  return destinations;
 }
 
 function mergeJson(destPath, newObj) {
@@ -490,13 +576,10 @@ function install(opts) {
   // ── Skills ──
   if (opts.installSkills && skillsDir && paths.skills) {
     const skillsDest = opts.global ? paths.skills : path.resolve(cwd, paths.skills);
-    let skillList = fs.readdirSync(skillsDir).filter(f => fs.statSync(path.join(skillsDir, f)).isDirectory());
-    if (opts.skills) {
-      const selected = opts.skills.split(',').map(s => s.trim());
-      skillList = skillList.filter(s => selected.includes(s));
-    }
-    for (const skill of skillList) {
-      actions.push({ type: 'copy', src: path.join(skillsDir, skill), dest: path.join(skillsDest, skill) });
+    const skillList = resolveSelectedSkills(discoverSkills(skillsDir), opts.skills);
+    const destinations = ensureUniqueSkillDestinations(skillList, skillsDest, ideConf.skillLayout);
+    for (const [dest, skill] of destinations) {
+      actions.push({ type: 'copy', src: skill.sourceDir, dest });
     }
   }
 
@@ -543,9 +626,9 @@ function showLangList() {
 function showSkillList() {
   const skillsDir = findDir('skills');
   if (!skillsDir) { log('找不到 skills/ 目錄', 'red'); return; }
-  const skills = fs.readdirSync(skillsDir).filter(f => fs.statSync(path.join(skillsDir, f)).isDirectory()).sort();
+  const skills = discoverSkills(skillsDir);
   log(`支援的 Skills（共 ${skills.length} 個）：`, 'blu');
-  for (const s of skills) { log(`  ${s}`, 'r'); }
+  for (const skill of skills) { log(`  ${skill.id}`, 'r'); }
 }
 
 // ─── Main ───

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 自動更新 README.md 的「語言規範」表格與「Skills 清單」區段
- * 觸發時機：source/*.md 或 skills/*\/SKILL.md 被修改後
+ * 觸發時機：source/*.md 或 skills 下任意層的 SKILL.md 被修改後
  */
 
 const fs = require('fs');
@@ -23,24 +23,21 @@ const LANG_CONFIG = {
   pulumi:     { files: '`pulumi.md`',      glob: '`Pulumi.yaml`, `Pulumi.*.yaml`' },
 };
 
-// Skill 名稱前綴 → 分類群組
+// 來源目錄第一層 → README 分類群組
 const SKILL_GROUPS = {
-  'financial':    'Financial',
-  'go-':          'Go',
-  'rust-':        'Rust',
-  'react-':       'React',
-  'dev-':         'Dev',
-  'sre-':         'SRE / DevOps',
-  'devops-':      'SRE / DevOps',
-  'aws-':         'SRE / DevOps',
-  'k8s-':         'SRE / DevOps',
-  'release-':     'SRE / DevOps',
-  'pres-':        'Presentation',
+  documentation: 'Documentation',
+  programming: 'Programming',
+  frontend: 'Frontend',
+  infrastructure: 'Infrastructure',
+  engineering: 'Engineering',
+  design: 'Design',
+  business: 'Business',
+  productivity: 'Productivity',
 };
-const GROUP_ORDER = ['Financial', 'Go', 'Rust', 'React', 'Dev', 'SRE / DevOps', 'Presentation', '通用'];
+const GROUP_ORDER = ['Documentation', 'Programming', 'Frontend', 'Infrastructure', 'Engineering', 'Design', 'Business', 'Productivity', '通用'];
 
 // ─── 讀取 SKILL.md 的 name 與 description ───
-function parseSkillMd(skillDir) {
+function parseSkillMd(skillDir, id) {
   const fp = path.join(skillDir, 'SKILL.md');
   if (!fs.existsSync(fp)) return null;
   const content = fs.readFileSync(fp, 'utf8');
@@ -55,7 +52,7 @@ function parseSkillMd(skillDir) {
   let desc = '';
   const lines = fm.split('\n');
   let i = lines.findIndex(l => l.startsWith('description:'));
-  if (i === -1) return { name, desc };
+  if (i === -1) return { id, name, desc };
 
   const inline = lines[i].replace(/^description:\s*/, '').replace(/^["']|["']$/g, '').trim();
   if (inline && inline !== '|') {
@@ -82,7 +79,27 @@ function parseSkillMd(skillDir) {
   const firstSentence = desc.match(/^([^。.！!？?\n]+[。.！!？?]?)/);
   if (firstSentence) desc = firstSentence[1].trim();
 
-  return { name, desc };
+  return { id, name, desc };
+}
+
+function discoverSkills(skillsDir) {
+  const skills = [];
+
+  function visit(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    if (entries.some(entry => entry.isFile() && entry.name === 'SKILL.md')) {
+      const id = path.relative(skillsDir, dir).split(path.sep).join('/');
+      const skill = parseSkillMd(dir, id);
+      if (skill) skills.push(skill);
+      return;
+    }
+    for (const entry of entries) {
+      if (entry.isDirectory()) visit(path.join(dir, entry.name));
+    }
+  }
+
+  visit(skillsDir);
+  return skills.sort((a, b) => a.id.localeCompare(b.id));
 }
 
 // ─── 產生語言規範表格 ───
@@ -100,19 +117,10 @@ function buildLangTable() {
 // ─── 產生 Skills 清單 ───
 function buildSkillsSection() {
   const skillsDir = path.join(ROOT, 'skills');
-  const dirs = fs.readdirSync(skillsDir)
-    .filter(f => fs.statSync(path.join(skillsDir, f)).isDirectory())
-    .sort();
-
   // 分組
   const groups = {};
-  for (const dir of dirs) {
-    const skill = parseSkillMd(path.join(skillsDir, dir));
-    if (!skill) continue;
-    let group = '通用';
-    for (const [prefix, g] of Object.entries(SKILL_GROUPS)) {
-      if (dir.startsWith(prefix)) { group = g; break; }
-    }
+  for (const skill of discoverSkills(skillsDir)) {
+    const group = SKILL_GROUPS[skill.id.split('/')[0]] || '通用';
     if (!groups[group]) groups[group] = [];
     groups[group].push(skill);
   }
@@ -121,9 +129,9 @@ function buildSkillsSection() {
   for (const g of GROUP_ORDER) {
     if (!groups[g]?.length) continue;
     lines.push(`### ${g}`, '');
-    lines.push('| Skill 名稱 | 說明 |', '|------------|------|');
-    for (const { name, desc } of groups[g]) {
-      lines.push(`| \`${name}\` | ${desc} |`);
+    lines.push('| Skill ID | 說明 |', '|----------|------|');
+    for (const { id, desc } of groups[g]) {
+      lines.push(`| \`${id}\` | ${desc} |`);
     }
     lines.push('');
   }
@@ -150,8 +158,7 @@ function main() {
 
   fs.writeFileSync(README, readme, 'utf8');
 
-  const skillCount = fs.readdirSync(path.join(ROOT, 'skills'))
-    .filter(f => fs.statSync(path.join(path.join(ROOT, 'skills'), f)).isDirectory()).length;
+  const skillCount = discoverSkills(path.join(ROOT, 'skills')).length;
   console.log(`README 已更新：${Object.keys(LANG_CONFIG).length} 種語言規範，${skillCount} 個 Skills`);
 }
 

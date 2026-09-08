@@ -4,6 +4,20 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-08
+
+### ✨ Added
+- Skills 來源改採領域式巢狀分類，Installer 支援遞迴探索與 canonical ID。
+- 新增 `documentation/readme` 與 `documentation/technical-writing` skills，包含 references、Mermaid 圖表指南與可複用模板。
+- Codex 保留 skill 分類階層；Copilot、Kiro、Antigravity 自動使用扁平化目錄。
+
+### 📝 Changed
+- 分類名稱統一為 `programming` 與 `infrastructure`。
+- README 自動更新 Hook 支援巢狀 skill，Skills 清單更新為 54 個。
+
+### 🔧 Fixed
+- 保留 `aws-eks-ami` 與 `k8s-debug` 舊有選取 ID，避免分類搬遷後既有安裝指令失效。
+
 ## [1.0.7] - 2026-07-24
 
 ### ✨ Added
