@@ -232,6 +232,91 @@ export function useCreateUser() {
 }
 ```
 
+## One-Time Code 驗證狀態
+
+OTP input 的字元收集與 server 驗證是兩個責任。用 custom hook 集中處理完整性、送出中、上次送出的 code、server error 與重設；將驗證函式由外層注入，不在 hook 中硬編碼 endpoint 或重送流程。
+
+```tsx
+import { useCallback, useMemo, useRef, useState } from 'react';
+
+type VerificationStatus = 'idle' | 'submitting' | 'error' | 'success';
+
+interface UseOneTimeCodeOptions {
+  length: number;
+  verifyCode: (code: string) => Promise<void>;
+}
+
+export function useOneTimeCode({ length, verifyCode }: UseOneTimeCodeOptions) {
+  const [value, setValue] = useState('');
+  const [status, setStatus] = useState<VerificationStatus>('idle');
+  const [error, setError] = useState<string | null>(null);
+  const lastSubmittedCode = useRef<string | null>(null);
+
+  const isComplete = value.length === length;
+
+  const updateValue = useCallback((next: string) => {
+    setValue(next.slice(0, length));
+    setError(null);
+    setStatus('idle');
+  }, [length]);
+
+  const reset = useCallback(() => {
+    setValue('');
+    setError(null);
+    setStatus('idle');
+    lastSubmittedCode.current = null;
+  }, []);
+
+  const verify = useCallback(async (candidate = value) => {
+    if (candidate.length !== length || status === 'submitting' || lastSubmittedCode.current === candidate) {
+      return;
+    }
+
+    lastSubmittedCode.current = candidate;
+    setStatus('submitting');
+    setError(null);
+
+    try {
+      await verifyCode(candidate);
+      setStatus('success');
+    } catch (cause) {
+      setStatus('error');
+      setError(cause instanceof Error ? cause.message : '驗證碼驗證失敗，請再試一次。');
+    }
+  }, [length, status, value, verifyCode]);
+
+  return useMemo(() => ({
+    value,
+    isComplete,
+    verificationStatus: status,
+    error,
+    setValue: updateValue,
+    reset,
+    verify,
+  }), [error, isComplete, reset, status, updateValue, value, verify]);
+}
+```
+
+使用時，`onComplete` 將剛完成的 code 傳給 `verify`。不可假設 `onComplete` 只會呼叫一次；使用者修改完整 code 後可能再次完成輸入。
+
+```tsx
+const otp = useOneTimeCode({ length: 6, verifyCode });
+
+<OneTimeCodeInput
+  length={6}
+  value={otp.value}
+  onChange={otp.setValue}
+  onComplete={(code) => void otp.verify(code)}
+  status={otp.verificationStatus === 'error' ? 'error' : 'idle'}
+  disabled={otp.verificationStatus === 'submitting'}
+/>
+```
+
+- 使用者重新輸入時清除舊錯誤，並允許不同 code 再次驗證。
+- 失敗後是否保留或清空 code 由產品與 server 回應決定；預設保留以便修正輸入。
+- code 過期、重送、倒數與 transport 由呼叫端或另一個 hook 管理；不要讓 `useOneTimeCode` 假設 API endpoint、期限或 rate limit。
+- 若 `verifyCode` 來自 React Query mutation，可在外層將 mutation 包裝成回傳 `Promise<void>` 的函式，再注入此 hook。
+
 ## 規則摘要
 
 - 自訂 Hook 回傳 `{ data, loading, error, action }` 結構
@@ -240,3 +325,5 @@ export function useCreateUser() {
 - useEffect 必須處理 cleanup 與 race condition
 - Server state 用 TanStack Query / SWR；不用 useEffect + useState 手動管理
 - 避免在 useEffect 中設定可從 props/state 推導的值
+- OTP 驗證以 hook 管理完整性、送出中、錯誤與去重；input 元件不直接呼叫 API
+- 相同完整 code 或 submitting 狀態不重複驗證；重送與過期規則由外層管理
