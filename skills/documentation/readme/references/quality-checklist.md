@@ -19,11 +19,16 @@
 - badges、示範與 features 是否有明確效益，而非裝飾。
 - quick start 是否含前置條件、可複製指令與預期結果。
 - 安裝、版本、平台與相依是否由 manifest、release 或設定驗證。
+- 若範例受特定 major version、peer dependency 或工具版本影響，是否說明已驗證或必要的相容範圍。
 - 範例是否有必要 import、真實資料、預期輸出與由簡至繁安排。
+- 公開 README 是否沒有長期 TODO、`Coming soon`、未替換 placeholder 或空的選用段落；skill template 的 `[待確認]` 不在此限。
 - 設定與 API 是否只寫公開介面，且 key、型別、預設值與 signature 有來源。
 - architecture 是否僅用於複雜系統，且資料流圖與實作一致。
+- 截圖、GIF、影片與終端輸出是否和目前版本一致；無法維護時是否移除。
 - contributing、what's new、license、acknowledgments 與 FAQ 是否符合納入條件。
 - FAQ 是否由真實 issue、討論、支援紀錄或已知錯誤驅動，並提供可採取解法。
+- 有證據且影響採用時，是否揭露 non-goals、已知限制、成熟度、支援平台與不適用情境。
+- 開場是否先以平實語言說明，再引入縮寫或領域術語。
 - heading、格式、連結、跨文件一致性與深入文件導覽是否正確。
 
 ## Audit 輸出
