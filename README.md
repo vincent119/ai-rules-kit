@@ -1,100 +1,88 @@
 # ai-rules-kit
 
-一鍵安裝 AI 開發規範與 Skills 到你的 AI IDE，統一團隊的 AI 輔助開發標準。
+將一套可版本控制的 AI 開發規範、領域 skills 與支援 hooks，安裝到團隊使用的 AI IDE。
 
-透過預先定義的語言規範（Rules）與領域技能（Skills），讓 AI 助手在不同 IDE 中產生一致、高品質的程式碼。
+本專案把 `skills/` 視為依領域分類的來源；安裝器會依目標 IDE 的能力，產生相容的規則、skill 與 hook。來源結構不需要為任何單一工具妥協。
 
-## 目錄
-
-- [功能特色](#功能特色)
 - [快速開始](#快速開始)
-- [更新已安裝規範](#更新已安裝規範)
 - [系統需求](#系統需求)
 - [支援的 IDE](#支援的-ide)
 - [語言規範](#語言規範)
 - [Skills 清單](#skills-清單)
 - [CLI 參考](#cli-參考)
-- [安裝範圍](#安裝範圍)
-- [規範模式](#規範模式)
-- [Specs 共用規範](#specs-共用規範)
-- [IDE 安裝路徑對照](#ide-安裝路徑對照)
-- [使用範例](#使用範例)
-- [專案結構](#專案結構)
-- [貢獻指南](#貢獻指南)
-- [Hooks](#hooks)
-- [授權](#授權)
+- [貢獻](#貢獻)
 
-## 功能特色
+## 適用情境
 
-- 支援 6 種主流 AI IDE，一套規範多處部署
-- 涵蓋 9 種程式語言的編碼規範
-- 內建 52 個領域 Skills，涵蓋 Go、Rust、React、SRE、DevOps、Financial 等
-- 自動產生各 IDE 所需的 frontmatter 格式
-- 支援專案層級與使用者層級（全域）安裝
-- 提供 `--dry-run` 預覽模式，安裝前可確認寫入路徑
-- 零依賴，透過 `npx` 直接執行
+- 團隊希望在每個專案安裝一致的規則與專業 skills。
+- 開發者希望以 `--global` 在自己的環境保留常用規則與 skills。
+- 同一份 skill 來源需要同時支援保留巢狀結構與只接受單層目錄的 IDE。
+
+它不是執行期外掛或代理框架；它的責任是把儲存在此 repository 的檔案，複製到各 IDE 可辨識的位置。
 
 ## 快速開始
 
-```bash
-# 安裝 Go 規範與全部 Skills 到 Kiro（專案層級）
-npx @vincent119/ai-rules-kit --kiro
-
-# 安裝 Go + Rust 規範到 Cursor
-npx @vincent119/ai-rules-kit --cursor --lang "go,rust"
-
-# 安裝全部 Skills 到 Codex（專案層級）
-npx @vincent119/ai-rules-kit --codex --skills
-
-# 安裝到 GitHub Copilot（全域）
-npx @vincent119/ai-rules-kit --copilot --global
-```
-
-## 更新已安裝規範
-
-已安裝過的專案或使用者層級規範，可重新執行相同指令更新。
+在目標專案的根目錄執行：
 
 ```bash
-# 更新 Kiro 專案層級 rules、skills、hooks
-npx @vincent119/ai-rules-kit --kiro
-
-# 更新全域 Copilot 規範
-npx @vincent119/ai-rules-kit --copilot --global
-
-# 更新 Codex 專案層級 Skills
-npx @vincent119/ai-rules-kit --codex --skills
-
-# 更新指定 Skills
-npx @vincent119/ai-rules-kit --codex --skills "engineering/agent-development/sdd-skill,programming/go/go-ddd"
+# 僅安裝 Codex skills
+npx --yes @vincent119/ai-rules-kit --codex --skills
 ```
 
-更新前可先使用 `--dry-run` 檢查寫入路徑：
+Codex 會保留來源的分類路徑，例如：
+
+```text
+.codex/skills/documentation/readme/
+.codex/skills/frontend/react/react-component-patterns/
+```
+
+若要安裝 Kiro 支援的全部元件，執行：
 
 ```bash
-npx @vincent119/ai-rules-kit --kiro --dry-run
+npx --yes @vincent119/ai-rules-kit --kiro
 ```
 
-更新會依目前選項重新寫入對應檔案。若專案內曾手動修改已安裝的 rules、skills 或 hooks，請先備份或使用版本控制確認差異。
+這會安裝 Kiro 的 rules、skills 與 hooks；其 skills 目的端會使用扁平名稱。
 
 ## 系統需求
 
-- Node.js >= 14.0.0
-- npm 或 npx
+- Node.js 14.0.0 或更新版本。
+- npm 或 npx。
 
-不需要全域安裝，直接透過 `npx` 執行即可。
+不需要預先全域安裝此套件，可直接透過 `npx` 執行。
+
+## 核心能力
+
+- 支援 GitHub Copilot、Cursor、Claude Code、Codex、Kiro 與 Antigravity。
+- 提供 9 種程式語言或設定檔的規則，以及額外的 commit、PR 規範。
+- 提供依領域分類的 skills，CLI 會遞迴探索所有 `SKILL.md`。
+- Codex 保留來源的巢狀 skill 路徑；GitHub Copilot、Kiro 與 Antigravity 會扁平化路徑以相容其目的端。
+- 支援專案層級、使用者層級、選擇性安裝與 dry run 預覽。
+
+## 運作方式
+
+```mermaid
+flowchart LR
+    Source[skills/\n分類來源] --> Installer[ai-rules-kit CLI]
+    Installer --> Codex[Codex\n保留巢狀路徑]
+    Installer --> Flat[Copilot · Kiro · Antigravity\n扁平化技能名稱]
+    Installer --> Components[Rules 與支援的 Hooks]
+```
+
+例如 `programming/go/go-grpc` 是來源 skill 的 canonical ID。安裝到 Codex 時仍使用此層級；安裝到需要單層目的端的 IDE 時則會成為 `programming-go-go-grpc`。因此新增工具或改變工具限制時，只需調整安裝器的 adapter，不必重組來源 repository。
 
 ## 支援的 IDE
 
-| 旗標 | IDE | Skills 支援 |
-|------|-----|:-----------:|
-| `--copilot` / `--vscode` | GitHub Copilot (VS Code / JetBrains) | O |
-| `--cursor` | Cursor | - |
-| `--claude` | Claude Code | - |
-| `--codex` | Codex | O |
-| `--kiro` | Kiro | O |
-| `--antigravity` | Antigravity (Google) | O |
+| IDE | 旗標 | Rules | Skills | Hooks |
+| --- | --- | --- | --- | --- |
+| GitHub Copilot（VS Code） | `--copilot`、`--vscode` | 支援 | 支援 | 不支援 |
+| Cursor | `--cursor` | 支援 | 不支援 | 不支援 |
+| Claude Code | `--claude` | 支援 | 不支援 | 支援 |
+| Codex | `--codex` | 支援 | 支援 | 不支援 |
+| Kiro | `--kiro` | 支援 | 支援 | 支援 |
+| Antigravity | `--antigravity` | 支援 | 支援 | 不支援 |
 
-Skills 在 Copilot、Codex、Kiro 與 Antigravity 中支援，其他 IDE 僅安裝語言規範與全域規範。
+未指定元件旗標時，CLI 會安裝該 IDE 支援的全部元件。指定 `--rules`、`--skills` 或 `--hooks` 後，則只安裝明確指定且該 IDE 支援的元件。
 
 ## 語言規範
 
@@ -110,14 +98,12 @@ Skills 在 Copilot、Codex、Kiro 與 Antigravity 中支援，其他 IDE 僅安�
 | `helm` | `helm.md` | `Chart.yaml`, `values.yaml`, `templates/**/*.yaml` |
 | `pulumi` | `pulumi.md` | `Pulumi.yaml`, `Pulumi.*.yaml` |
 
-額外規範（透過 `--extras` 安裝）：
+額外規範
 
-| 名稱 | 說明 |
-|------|------|
-| `commit` | Commit Message 撰寫規範 |
-| `pr` | Pull Request 撰寫規範 |
-
-Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 context 限制）與 `extended`（約 15KB，完整版）。其他語言兩種模式內容相同。
+| 規範 | 選項 | 用途 |
+| --- | --- | --- |
+| Commit | `--extras commit` | 提供 Conventional Commits 與提交前檢查原則。 |
+| Pull Request | `--extras pr` | 提供 PR 描述、審查與合併前檢查原則。 |
 
 ## Skills 清單
 
@@ -217,285 +203,109 @@ Go 語言提供兩種模式：`minimal`（約 3KB，適用 Copilot/Claude 的 co
 
 ## CLI 參考
 
-```
+基本格式：
+
+```bash
 npx @vincent119/ai-rules-kit --<ide> [選項]
 ```
 
-### 必要參數
+| 選項 | 說明 |
+| --- | --- |
+| `--copilot`、`--vscode`、`--cursor`、`--claude`、`--codex`、`--kiro`、`--antigravity` | 選擇目標 IDE。 |
+| `--rules` | 只安裝 rules。 |
+| `--skills [ids]` | 安裝全部 skills；提供以逗號分隔的 canonical ID 時，僅安裝指定 skills。 |
+| `--hooks` | 只安裝目標 IDE 支援的 hooks。 |
+| `--all` | 安裝目標 IDE 支援的全部元件。 |
+| `--global` | 安裝到使用者層級；global 安裝不包含 hooks。 |
+| `--lang <名稱>` | 指定語言規範，可用逗號分隔多個名稱。 |
+| `--mode <minimal\|extended>` | 選擇語言規範模式。 |
+| `--extras <commit,pr>` | 加入額外規範。 |
+| `--dry-run` | 列出預計建立或覆寫的檔案，不寫入磁碟。 |
+| `--help`、`-h` | 顯示完整說明。 |
 
-| 參數 | 說明 |
-|------|------|
-| `--copilot` / `--vscode` | 安裝到 GitHub Copilot |
-| `--cursor` | 安裝到 Cursor |
-| `--claude` | 安裝到 Claude Code |
-| `--codex` | 安裝到 Codex |
-| `--kiro` | 安裝到 Kiro |
-| `--antigravity` | 安裝到 Antigravity |
+使用 `--skills list` 可列出目前可安裝的 skill canonical ID：
 
-### 安裝項目（預設全部）
+```bash
+npx --yes @vincent119/ai-rules-kit --codex --skills list
+```
 
-| 參數 | 說明 |
-|------|------|
-| `--rules` | 只安裝語言規範 |
-| `--skills` | 只安裝 Skills |
-| `--hooks` | 只安裝 Hooks（僅 Kiro / Claude Code，不支援 `--global`） |
-| `--all` | 安裝全部（rules + skills + hooks） |
+## 常用操作
 
-未指定任何安裝項目旗標時，預設為 `--all`。
+預覽 Codex skills 安裝結果：
 
-### 選用參數
+```bash
+npx --yes @vincent119/ai-rules-kit --codex --skills --dry-run
+```
 
-| 參數 | 預設值 | 說明 |
-|------|--------|------|
-| `--global` | `false` | 安裝到使用者目錄（全域），而非專案目錄（hooks 不支援 global） |
-| `--mode <minimal\|extended>` | copilot/claude/codex: `minimal`，其他: `extended` | 規範版本 |
-| `--lang <languages>` | 全部 | 語言規範，逗號分隔指定語言 |
-| `--skills <names>` | 全部 | 只安裝指定的 Skills，逗號分隔，可用完整 Skill ID 或唯一短名稱 |
-| `--extras <names>` | 無 | 額外規範：`commit`（Commit Message）、`pr`（Pull Request） |
-| `--dry-run` | `false` | 預覽安裝路徑，不實際寫入檔案 |
-| `--help` / `-h` | - | 顯示說明 |
+只安裝 README 與 React 元件模式 skills：
 
-### Skill ID 與目錄轉換
+```bash
+npx --yes @vincent119/ai-rules-kit --codex --skills "documentation/readme,frontend/react/react-component-patterns"
+```
 
-Skills 在來源 Repository 依領域分類。直接包含 `SKILL.md` 的目錄是一個 skill，並以從 `skills/` 起算的相對路徑作為 Skill ID，例如 `programming/go/go-grpc`。
+安裝到使用者層級：
 
-`--skills` 可指定完整 Skill ID；舊的短名稱僅在全域唯一時仍可使用。若短名稱重複，CLI 會列出可使用的完整 ID。
+```bash
+npx --yes @vincent119/ai-rules-kit --codex --global --skills
+```
 
-安裝時，Codex 保留來源階層；Copilot、Kiro 與 Antigravity 使用完整 ID 的連字號版本，例如 `programming/go/go-grpc` 轉為 `programming-go-go-grpc`。
+更新既有安裝時，重新執行原本使用的目標與元件選項即可。CLI 會覆寫本次複製的同名檔案，但不會自動刪除來源已移除的舊檔案；若曾手動修改安裝結果，請先透過版本控制或備份保留變更。
+
+## Skill ID 與目的端路徑
+
+Skill 的 canonical ID 是 `skills/` 下、含有 `SKILL.md` 之目錄的相對路徑。例如：
+
+```text
+skills/documentation/readme/SKILL.md
+→ documentation/readme
+```
+
+| 目標類型 | `documentation/readme` 的安裝結果 |
+| --- | --- |
+| Codex | `.codex/skills/documentation/readme/` |
+| GitHub Copilot | `.github/skills/documentation-readme/` |
+| Kiro | `.kiro/skills/documentation-readme/` |
+| Antigravity | `.agent/skills/documentation-readme/` |
+
+為了相容舊指令，`aws-eks-ami` 與 `k8s-debug` 仍可作為 `infrastructure/aws/eks-ami`、`infrastructure/kubernetes/debug` 的別名使用。
 
 ## 安裝範圍
 
-### 專案層級（預設）
+| 範圍 | 用法 | 適用情境 |
+| --- | --- | --- |
+| 專案層級 | 預設 | 在目前工作目錄建立 IDE 對應的設定目錄，適合提交給團隊共同使用。 |
+| 使用者層級 | `--global` | 安裝到使用者設定目錄，適合個人預設；不安裝 hooks。 |
 
-規範檔案安裝到目前工作目錄下的 IDE 設定資料夾，僅對該專案生效。
+## Rules 模式
 
-### 使用者層級（`--global`）
-
-規範檔案安裝到使用者家目錄下的 IDE 設定資料夾，對所有專案生效。
-
-## 規範模式
-
-| 模式 | 說明 | 適用場景 |
-|------|------|---------|
-| `minimal` | 精簡版，約 3KB | Copilot、Claude Code、Codex 等有 context 大小限制的 IDE |
-| `extended` | 完整版，約 15KB | Cursor、Kiro、Antigravity 等無限制的 IDE |
-
-目前僅 Go 語言區分兩種模式，其他語言兩種模式內容相同。
-
-## Specs 共用規範
-
-`.specs` 用於 Codex、Claude、Kiro 與其他 agent 共用的開發前規格文件。正式 spec 目錄格式為：
-
-```text
-.specs/{YYYY-MM-DD-HH-mm}_{Type}-{kebab-case-name}/
-```
-
-Draft 目錄格式為：
-
-```text
-.specs/drafts/{YYYY-MM-DD-HH-mm}_Draft-{kebab-case-name}/
-```
-
-`Type` 僅允許 `Feature`、`BugFix`、`Refactor`、`Docs`、`Chore`。完整規則見 `source/kiro-specs.md`。
-
-## IDE 安裝路徑對照
-
-### 專案層級
-
-| IDE | 全域規範 | 語言規範 | Skills | Hooks |
-|-----|---------|---------|--------|-------|
-| Copilot | `.github/copilot-instructions.md` | `.github/instructions/<lang>.instructions.md` | `.github/skills/<flattened-id>/` | - |
-| Cursor | - | `.cursor/rules/<lang>.mdc` | - | - |
-| Claude Code | `CLAUDE.md` | `.claude/rules/<lang>.md` | - | `.claude/settings.json` |
-| Codex | `AGENTS.md` | `.codex/rules/<lang>.md` | `.codex/skills/<canonical-id>/` | - |
-| Kiro | - | `.kiro/steering/<lang>.md` | `.kiro/skills/<flattened-id>/` | `.kiro/hooks/` + `.kiro/agents/` |
-| Antigravity | `.gemini/GEMINI.md` | `.agent/rules/<lang>.md` | `.agent/skills/<flattened-id>/` | - |
-
-### 使用者層級（`--global`）
-
-| IDE | 全域規範 | 語言規範 | Skills |
-|-----|---------|---------|--------|
-| Copilot | - | `~/.copilot/instructions/<lang>.instructions.md` | `~/.copilot/skills/<flattened-id>/` |
-| Cursor | - | `~/.cursor/rules/<lang>.mdc` | - |
-| Claude Code | `~/.claude/CLAUDE.md` | `~/.claude/rules/<lang>.md` | - |
-| Codex | `~/.codex/AGENTS.md` | `~/.codex/rules/<lang>.md` | `~/.codex/skills/<canonical-id>/` |
-| Kiro | - | `~/.kiro/steering/<lang>.md` | `~/.kiro/skills/<flattened-id>/` |
-| Antigravity | `~/.gemini/GEMINI.md` | `~/.agent/rules/<lang>.md` | `~/.agent/skills/<flattened-id>/` |
-
-## 使用範例
-
-### 基本安裝
-
-```bash
-# Go 規範 + 全部 Skills + Hooks 安裝到 Kiro（預設全部）
-npx @vincent119/ai-rules-kit --kiro
-
-# Go 規範安裝到 Copilot（minimal 模式）
-npx @vincent119/ai-rules-kit --copilot
-
-# Codex 安裝全部 Skills
-npx @vincent119/ai-rules-kit --codex --skills
-```
-
-### 選擇性安裝
-
-```bash
-# 只安裝語言規範
-npx @vincent119/ai-rules-kit --kiro --rules
-
-# 只安裝 Hooks
-npx @vincent119/ai-rules-kit --kiro --hooks
-
-# 只安裝 Skills
-npx @vincent119/ai-rules-kit --kiro --skills
-
-# 組合安裝（rules + hooks）
-npx @vincent119/ai-rules-kit --kiro --rules --hooks
-```
-
-### 多語言
-
-```bash
-# 同時安裝 Go、Bash、Rust 規範
-npx @vincent119/ai-rules-kit --cursor --lang "go,bash,rust"
-```
-
-### 選擇性安裝 Skills
-
-```bash
-# 只安裝 DDD 與 gRPC 相關 Skills
-npx @vincent119/ai-rules-kit --kiro --skills "programming/go/go-ddd,programming/go/go-grpc"
-```
-
-### 加入額外規範
-
-```bash
-# 加入 Commit Message 與 PR 撰寫規範
-npx @vincent119/ai-rules-kit --kiro --extras "commit,pr"
-```
-
-### 全域安裝
-
-```bash
-# 安裝到使用者目錄，所有專案共用
-npx @vincent119/ai-rules-kit --kiro --global
-```
-
-### 預覽模式
-
-```bash
-# 預覽安裝路徑，不寫入任何檔案
-npx @vincent119/ai-rules-kit --kiro --dry-run
-```
-
-## 專案結構
-
-```
-ai-rules-kit/
-├── cli/
-│   └── install.js          # CLI 安裝程式
-├── source/                  # 語言規範原始檔
-│   ├── global.md            # 全域開發規範
-│   ├── go-core-minimal.md   # Go 精簡版
-│   ├── go-core-extended.md  # Go 完整版
-│   ├── react.md
-│   ├── rust.md
-│   ├── bash.md
-│   ├── python.md
-│   ├── typescript.md
-│   ├── yaml.md
-│   ├── helm.md
-│   ├── pulumi.md
-│   ├── kiro-specs.md        # Specs 共用規範
-│   ├── commit-message.md    # Commit Message 規範
-│   └── pull-request.md      # Pull Request 規範
-├── skills/                  # Skill 原始碼，依領域分類
-│   ├── documentation/
-│   │   └── changelog-generator/
-│   ├── backend/
-│   │   ├── go/
-│   │   │   └── go-grpc/
-│   │   └── rust/
-│   ├── infrastructure/
-│   │   ├── devops/
-│   │   └── sre/
-│   ├── engineering/
-│   ├── design/
-│   └── ...（共 52 個 Skills）
-├── hooks/                   # Hooks（Kiro / Claude Code）
-│   └── update-readme/
-│       ├── update-readme.kiro.hook      # Kiro IDE UI hook
-│       ├── update-readme.json           # Kiro CLI agent hook
-│       ├── update-readme.claude.json    # Claude Code hook
-│       └── script/
-│           └── update-readme.js         # 共用腳本
-├── package.json
-├── LICENSE
-└── README.md
-```
-
-## 貢獻指南
-
-1. Fork 此專案
-2. 建立 feature branch：`git checkout -b feature/your-feature`
-3. 提交變更：`git commit -m '新增功能描述'`
-4. 推送分支：`git push origin feature/your-feature`
-5. 建立 Pull Request
-
-### 新增語言規範
-
-在 `source/` 目錄下新增 `<language>.md`，並在 `cli/install.js` 的 `LANG_CONFIG` 中加入對應設定。
-
-### 新增 Skill
-
-在 `skills/<領域>/<skill>/` 下建立資料夾，並放入 `SKILL.md`。直接包含 `SKILL.md` 的資料夾會被視為一個 skill；可參考 `engineering/agent-development/skill-creator` 的指南。
-
-### 新增 Hook
-
-在 `hooks/` 目錄下建立新資料夾，包含：
-- `<name>.kiro.hook`：Kiro IDE UI hook（JSON 格式）
-- `<name>.json`：Kiro CLI agent hook（JSON 格式）
-- `<name>.claude.json`：Claude Code hook（會合併到 `.claude/settings.json`）
-- `script/`：共用腳本目錄
-
-Kiro hook 腳本會安裝到 `.kiro/hooks/<name>/script/`，Claude Code hook 腳本會安裝到 `.claude/hooks/<name>/script/`。Hook command 使用 `$PWD` 從專案根目錄解析腳本路徑。
+`minimal` 是 GitHub Copilot、Claude Code 與 Codex 的預設模式；其餘 IDE 預設為 `extended`。目前兩種模式僅影響 Go 規範的內容範圍，其他語言規範相同。
 
 ## Hooks
 
-Hooks 是自動化工作流程，當特定事件發生時（如檔案儲存、工具執行後）自動執行腳本或 AI 指令。
+目前提供 `update-readme` hook，支援 Kiro 與 Claude Code。當 skill 或來源規範變更時，它會更新本 README 的語言規範與 skills 清單，避免手動清單與實際內容漂移。
 
-### 支援的 IDE
-
-| IDE | 支援 Hooks | 說明 |
-|-----|-----------|------|
-| Kiro | ✓ | IDE UI hook（`.kiro.hook`）+ CLI agent hook（agent JSON） |
-| Claude Code | ✓ | 透過 `.claude/settings.json` 設定 |
-| Copilot | - | 不支援 |
-| Codex | - | 不支援 |
-| Cursor | - | 不支援 |
-| Antigravity | - | 不支援 |
-
-### 內建 Hooks
-
-#### update-readme
-
-自動偵測 `source/*.md` 或 `skills/` 下任意層的 `SKILL.md` 被修改後，執行 `update-readme.js` 腳本更新 README 的語言規範表格與 Skills 清單。
-
-**觸發時機**：
-- Kiro IDE：檔案儲存時（`fileEdited`）
-- Kiro CLI：AI 用 `fs_write` 工具寫入檔案後（`postToolUse`）
-- Claude Code：AI 用 `Write` 工具寫入檔案後（`PostToolUse`）
-
-**安裝**：
 ```bash
-npx @vincent119/ai-rules-kit --kiro --hooks
-npx @vincent119/ai-rules-kit --claude --hooks
+# Kiro
+npx --yes @vincent119/ai-rules-kit --kiro --hooks
+
+# Claude Code
+npx --yes @vincent119/ai-rules-kit --claude --hooks
 ```
 
-### 新增 Skill
+## 貢獻
 
-在 `skills/<領域>/<skill>/` 下建立資料夾，並放入 `SKILL.md`。可參考 `engineering/agent-development/skill-creator` 的指南。
+新增或調整規範前，請維持來源目錄的領域分類：rules 放在 `source/`，skills 放在 `skills/<領域>/<skill>/SKILL.md`。README 是入口文件；較長的流程、架構或操作說明應建立為獨立技術文件，再由 README 連結。
 
-## 授權
+提交前執行：
 
-本專案採用 [MIT License](LICENSE) 授權。
+```bash
+npm test
+node hooks/update-readme/script/update-readme.js
+git diff --check
+```
+
+第二個指令會依目前來源重新產生本文件的語言規範與 skills 清單。
+
+## 版本與授權
+
+套件發布於 [npm](https://www.npmjs.com/package/@vincent119/ai-rules-kit)，原始碼位於 [GitHub](https://github.com/vincent119/ai-rules-kit)。授權條款為 [MIT](LICENSE)。
