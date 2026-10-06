@@ -852,6 +852,14 @@ Knowledge Note 應保存：
 
 # 去重原則
 
+## Knowledge identity 與核心結構
+
+Pattern Note 的 knowledge identity 應優先保留必要成分與可重用的 grammatical relationship。
+
+原始例句中的 optional modifier 不會自動成為 pattern identity 的必要部分。若移除該 modifier 後，核心 grammatical structure 與 relationship 仍成立，通常不應將它納入主要 identity。
+
+有學習價值的 optional modifier 仍可保留在原始例句分析、usage extension、comparison 或 modifier analysis 中。
+
 建立 Knowledge Note 前，若已知 Knowledge Base 中存在相同主題，優先：
 
 - 更新既有筆記

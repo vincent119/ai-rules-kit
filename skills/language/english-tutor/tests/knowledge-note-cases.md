@@ -918,6 +918,118 @@ Knowledge Note 可以包含：
 
 ---
 
+## KN-025 — Optional Modifier Must Not Become Part of Knowledge Identity
+
+### Input
+
+使用者從這個原句建立句型 Knowledge Note：
+
+`Getting security wrong there gets expensive fast.`
+
+文件分析已正確指出：
+
+- `gets` = linking V
+- `expensive` = AdjP / C
+- `fast` = Adv
+- `fast` 表示狀態改變的速度
+- 移除 `fast` 後，`gets expensive` 仍是完整核心結構
+
+請判斷主要 knowledge identity。
+
+### Expected intent
+
+`knowledge-note`
+
+### Expected note type
+
+`pattern`
+
+### Expected knowledge identity
+
+`get + Adj`
+
+### Must identify
+
+核心 pattern：
+
+`get + Adj`
+
+表示：
+
+> 主詞進入或變成某種狀態。
+
+在原句：
+
+`gets expensive fast`
+
+中：
+
+- `gets expensive` = 核心結構
+- `fast` = optional adverbial modifier
+- `fast` 說明狀態改變發生的速度
+
+### Must distinguish
+
+核心句型：
+
+`get + Adj`
+
+與帶有額外 modifier 的實際 realization：
+
+`get + Adj + fast`
+
+後者可以作為原句或延伸用法說明，但不應取代主要 knowledge identity。
+
+### Must explain
+
+Knowledge identity 應優先保留：
+
+- necessary constituents
+- reusable grammatical relationship
+
+而不是把原始例句中的 optional modifier 一併固化進 pattern。
+
+移除 optional modifier 後，如果核心 grammatical relationship 仍成立，該 modifier 通常不應成為主要 pattern identity 的必要部分。
+
+### Expected title
+
+優先：
+
+`# get + Adj`
+
+而不是：
+
+`# get + Adj + fast`
+
+### May preserve
+
+Knowledge Note 可以保留：
+
+- 原始例句中的 `fast`
+- `fast` 的副詞功能
+- `fast` vs `quickly`
+- `get + Adj + fast` 作為實際用法
+- 其他句尾 `fast` 的例句
+
+但這些屬於：
+
+- 原句分析
+- optional modification
+- usage extension
+
+而不是主要 knowledge identity。
+
+### Must not
+
+- 將主要 knowledge identity 設為 `get + Adj + fast`
+- 因原始例句包含 `fast` 就把它視為 pattern 的必要 constituent
+- 刪除 `fast` 的有價值分析
+- 將 `fast` 標成 C
+- 將 `fast` 視為 `get` 必選的 complement
+- 因為 `fast` 可省略就認為它沒有學習價值
+
+---
+
 # Knowledge Note Cross-case Requirements
 
 評估 KN-001 至 KN-024 時，除了各案例條件外，必須進行以下跨案例檢查。
@@ -1421,6 +1533,42 @@ Comparison Note 可使用：
 
 不得為了新模板大量重新命名既有文件。
 
+## 17. Knowledge Identity 應區分必要成分與可選修飾語
+
+建立 Pattern Note 的 knowledge identity 時，應優先保留：
+
+- necessary constituents
+- reusable grammatical relationship
+
+原始例句中的 optional modifiers 不應因為出現在來源句中，就自動成為 pattern identity 的必要部分。
+
+例如：
+
+`get expensive fast`
+
+應先判斷：
+
+- `get + Adj` 是否已形成完整核心 pattern
+- `fast` 是否只是額外 adverbial modifier
+
+若移除 modifier 後：
+
+- 核心句法仍完整
+- 核心 grammatical relationship 不變
+
+則該 modifier 通常不應進入主要 knowledge identity。
+
+但 optional modifier 若具有學習價值，仍可保留於：
+
+- 原始例句分析
+- usage extension
+- comparison
+- common modification
+
+不得因為它不是 identity 的必要部分，就把相關有價值內容全部刪除。
+
+特別檢查 KN-025。
+
 ---
 
 # Knowledge Note Pass Criteria
@@ -1452,6 +1600,9 @@ Comparison Note 可使用：
 - [ ] 未讀取既有 Knowledge Base 時不宣稱已完成 merge / dedup
 - [ ] filename 優先反映 knowledge identity
 - [ ] 使用者既有 naming convention 優先於新模板偏好
+- [ ] Pattern knowledge identity 能區分 necessary constituents 與 optional modifiers
+- [ ] 原始例句中的 optional modifier 不會被機械式固化進 pattern identity
+- [ ] optional modifier 有學習價值時仍能保留於筆記內容
 
 ---
 

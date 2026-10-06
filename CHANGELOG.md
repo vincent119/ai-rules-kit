@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-10-06
+
+### 🔧 Fixed
+- Knowledge Note 的 Pattern identity 現在會區分必要成分與可選修飾語，避免將原句中的 optional modifier 固化為句型核心。
+- 新增 KN-025 regression case，保護 Pattern Note 的核心結構抽象行為。
+
 ## [1.2.0] - 2026-10-06
 
 ### ✨ Added
