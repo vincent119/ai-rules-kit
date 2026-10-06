@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-06
+
+### ✨ Added
+- 新增 `language/english-tutor` skill，支援英文單字、片語、句型、完整句、比較、修正、Learning Focus 與 Knowledge Note。
+- 新增 Regression、Generalization、Adversarial、Correction、Learning Focus 與 Knowledge Note 測試案例。
+
+### 📝 Changed
+- 新增 Language 分類與 `english-tutor` skill 的 README 登錄。
+
 ## [1.1.1] - 2026-09-08
 
 ### ✨ Added

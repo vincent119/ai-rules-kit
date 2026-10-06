@@ -201,6 +201,12 @@ flowchart LR
 |----------|------|
 | `productivity/meeting-transcriber` | 會議錄音轉會議紀要。 |
 
+### Language
+
+| Skill ID | 說明 |
+|----------|------|
+| `language/english-tutor` | 以繁體中文教學與分析英文字詞、句型、文法、語感和表達差異。 |
+
 ## CLI 參考
 
 基本格式：
