@@ -1030,6 +1030,138 @@ Knowledge Note 可以保留：
 
 ---
 
+## KN-026 — Shared Semantic Domain Does Not Automatically Form a Comparison Identity
+
+### Input
+
+一份舊筆記包含以下兩種時間表達：
+
+`I'll go check the data in 5 minutes.`
+
+`I'll do that before lunch.`
+
+請將這些內容整理成 Knowledge Notes。
+
+### Expected intent
+
+`knowledge-note`
+
+### Expected classification
+
+不應僅因兩者都表達時間，就建立單一 Comparison Note。
+
+### Expected knowledge identities
+
+第一個：
+
+`in + duration`
+
+核心意思：
+
+> 從參考時間起，經過某段時間後發生。
+
+第二個：
+
+`before + time/event`
+
+核心意思：
+
+> 在某個時間點或事件之前發生。
+
+### Expected note type
+
+兩者優先各自形成獨立的 Phrase Note。
+
+### Must identify
+
+`in + duration` 與 `before + time/event`：
+
+- 都可以提供時間資訊
+- 都可能回答廣義的「何時」
+- 但表達不同的 temporal relationship
+- 不競爭同一個語意選擇
+- 不構成天然的 minimal contrast
+- 不應只因出現在同一份來源筆記就建立 comparison identity
+
+### Must distinguish
+
+「屬於同一 semantic domain」
+
+與：
+
+「值得建立 Comparison Note」
+
+是不同判斷。
+
+例如：
+
+兩個 expression 都屬於：
+
+`time expressions`
+
+只代表它們適合：
+
+- 放在同一索引分類
+- 建立相關連結
+- 在需要時互相參照
+
+不代表主要 knowledge identity 必須是：
+
+`A vs B`
+
+### Comparison Note should require
+
+至少存在實際的 comparison relationship，例如：
+
+- 容易混淆
+- 意思接近但使用條件不同
+- 在相似 context 中需要選擇
+- grammatical structure 相近但 meaning 不同
+- 使用者明確要求比較
+- minimal contrast 能有效揭示差異
+
+不要求以上條件全部成立，但必須有實際 comparison value。
+
+### Must not
+
+- 因兩個 expression 都與時間有關就建立 Comparison Note
+- 因兩者出現在同一份來源文件就假設它們應合併
+- 因兩者都可以回答「何時」就視為 minimal contrast
+- 為了減少文件數量而製造人工 comparison identity
+- 刪除兩者之間有價值的 cross-reference
+
+### Expected Knowledge Base structure
+
+例如：
+
+`in + duration`
+→ Phrase Note
+
+`before + time/event`
+→ Phrase Note
+
+兩者可以在：
+
+`時間表達`
+
+索引分類中共同出現。
+
+若有必要，也可以互相建立 related-note reference。
+
+### Pass condition
+
+Skill 必須先判斷：
+
+> 是否存在真正的 comparison relationship？
+
+而不是：
+
+> 是否屬於同一 semantic domain？
+
+只有前者成立時，才應優先建立 Comparison Note。
+
+---
+
 # Knowledge Note Cross-case Requirements
 
 評估 KN-001 至 KN-024 時，除了各案例條件外，必須進行以下跨案例檢查。
@@ -1569,6 +1701,34 @@ Comparison Note 可使用：
 
 特別檢查 KN-025。
 
+## 18. Shared Semantic Domain 不等於 Comparison Identity
+
+建立 Comparison Note 前，必須確認兩個以上 expressions 之間存在實際 comparison value。
+
+可能的 comparison relationship 包括：
+
+- 容易混淆
+- 語意接近但使用條件不同
+- 在相似 context 中需要選擇
+- grammatical structure 相近但功能或意思不同
+- minimal contrast 能有效揭示差異
+- 使用者明確要求比較
+
+僅僅：
+
+- 屬於同一 semantic domain
+- 出現在同一來源文件
+- 都回答同一廣義問題
+- 都具有相同 topic tag
+
+不足以建立 Comparison Note。
+
+如果 expressions 各自具有穩定且獨立的 knowledge identity，
+但彼此沒有直接 comparison relationship，應優先建立獨立 Knowledge Notes，
+再透過 index、category 或 related-note reference 表達它們的主題關聯。
+
+特別檢查 KN-026。
+
 ---
 
 # Knowledge Note Pass Criteria
@@ -1603,6 +1763,10 @@ Comparison Note 可使用：
 - [ ] Pattern knowledge identity 能區分 necessary constituents 與 optional modifiers
 - [ ] 原始例句中的 optional modifier 不會被機械式固化進 pattern identity
 - [ ] optional modifier 有學習價值時仍能保留於筆記內容
+- [ ] Comparison Note 必須具有實際 comparison relationship
+- [ ] shared semantic domain 不會被誤判成 comparison identity
+- [ ] 來源文件中的相鄰內容不會因此被機械式合併
+- [ ] 獨立 knowledge identities 可以透過 index / cross-reference 建立主題關聯
 
 ---
 

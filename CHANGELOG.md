@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-10-06
+
+### 🔧 Fixed
+- Knowledge Note 只有在存在實際比較價值時才建立 Comparison Note，避免把共享語意領域或同一來源誤判為比較關係。
+- 新增 KN-026 regression case，保護獨立 knowledge identity 的組織方式。
+
 ## [1.2.1] - 2026-10-06
 
 ### 🔧 Fixed

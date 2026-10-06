@@ -593,6 +593,21 @@ vs.
 
 Comparison Note 應以差異為中心，不是分別寫兩篇百科。
 
+## 建立前判斷
+
+建立 Comparison Note 前，先確認表達之間是否存在實際 comparison value。可作為證據的情況包括：
+
+- 學習者容易混淆
+- 意思接近但使用條件不同
+- 在相似 context 中會互相競爭為替代選項
+- grammatical structure 相近但 function 或 meaning 不同
+- minimal 或 near-minimal contrast 能揭示有價值的差異
+- 使用者明確要求比較
+
+不必同時符合所有條件，但不能只因 shared semantic domain、同一來源文件、相鄰來源段落、同一 topic／category／tag，或回答同一個廣義問題，就建立 Comparison Note。
+
+若多個表達各自具有獨立、可重用的 knowledge identity，且不存在有意義的 comparison relationship，應維持為獨立 Knowledge Notes；需要時可透過 index、category 或 related-note reference 連結。
+
 ## 核心差異
 
 先直接回答：
