@@ -2,6 +2,10 @@
 
 本文件定義 `.specs` 目錄的共用命名與文件結構，供 Codex、Claude、Kiro 與其他 agent 使用。
 
+## 專案慣例優先
+
+先讀適用的 `AGENTS.md`，解析 spec workspace、任務檔名與 owning spec。以下 `.specs/`、`tasks.md` 是預設值；專案指定外部 workspace 或 `task.md` 時遵循專案規範。私有 workspace 不可用時回報，不在公開 repository 建立替代規劃。建立 helper 只支援預設位置與檔名，不符時直接依模板建立。
+
 ## 使用時機
 
 當功能需要先釐清需求、設計與實作任務時，使用 `.specs` 建立規格文件。
@@ -61,7 +65,7 @@ roadmap.md
 
 最小 draft 只需要 `brief.md`。
 
-Draft 用於探索與拆分，不直接實作。Draft 在 `Status: Draft` 時可修改；拆出正式 spec 後標記為 `Status: Promoted`，作為歷史來源不再修改。
+Draft 用於探索與拆分，不直接實作。Draft 在 `Status: Draft` 時可修改；拆出正式 spec 後標記為 `Status: Promoted`，作為歷史來源不再修改；歸檔時必要的引用路徑維護除外，不改寫歷史決策。
 
 正式 spec 來自 draft 時，需引用來源：
 
@@ -124,3 +128,16 @@ rg -n "^#|^##|^###|Boundary:|Depends:|Implementation Notes|Status:" .specs/{curr
 ```
 
 只讀當前 task 相關段落。
+
+## 正式 Spec 歸檔
+
+- 歸檔是位置變更，保留 Complete 狀態，不新增 Archived。目的地為解析後 workspace 的 `archive/{原建立年份}/{完整原目錄名稱}/`，建立路徑保持既有慣例。
+- 只有正式 spec 標記 Complete、必要任務及驗收完成、有驗證紀錄且無必要阻塞才可歸檔；日期、勾選或狀態本身不足。證據不足列待確認。非必要後續改善已記錄去向或不納入理由即可保留未完成，不得降級必要工作。
+- 只要求候選清單時唯讀，列資格、證據、原因與目的地。明確歸檔授權可執行合格目標；不因任務完成自動搬移。
+- 歸檔請求可按指定範圍列舉與檢查資格摘要；一般實作仍只讀目前 spec，歷史按需查閱。
+- 驗證來源名稱、建立年份與實體路徑；不合格式列待確認，排除 draft、越界來源及外連符號連結。目的地衝突不覆寫或合併；已歸檔回報現況。
+- 搬移前檢查既有修改及引用映射；維護專案及私有 workspace 中的來源 draft、roadmap、跨 spec、索引引用與文件內相對連結，核對前後解析目標。保留歷史敘述與結果；既有破損連結及不能控制的外部引用另列限制。
+- 成功需確認內容完整、來源移除、有效引用仍有效。部分失敗回報實際位置、已完成與剩餘項目及安全復原方式，不宣稱整批成功。私有規劃不得複製進公開 repository。
+- 已完成工作的新增需求或 bug 建立新 spec 引用歷史；同一未完成工作沿用原 spec。第一版不新增 archive CLI、排程或強制索引，不批次搬移使用者專案。
+
+有安裝 `sdd-skill` 時，歸檔操作細節依該技能的 `references/archiving.md`。
