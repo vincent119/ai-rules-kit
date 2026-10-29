@@ -1,6 +1,6 @@
 ---
 name: sdd-skill
-description: SDD（Spec Driven Development）工作流程。用於在實作前建立 .specs 下的 requirements.md、design.md、tasks.md，規劃功能邊界、驗收條件、技術設計與實作任務，並追蹤任務進度、評估完成證據及歸檔正式 spec。
+description: SDD（Spec Driven Development）工作流程。用於實作前的需求、設計與任務規劃、任務追蹤、Spec 狀態摘要、完成證據檢查及正式 spec 歸檔。
 ---
 
 # Spec Driven Development
@@ -173,6 +173,12 @@ git diff --check
 若 diff 超出 Boundary，標記 `Blocked` 或更新任務邊界後再繼續。
 
 品質檢查清單放在 `tasks.md` 的驗證任務中，不額外建立 `checklist.md`。
+
+## 狀態摘要與完成證據檢查
+
+使用者要求「Spec 狀態摘要」、「盤點進度」、「哪些待驗證」或「檢查完成證據」時，讀取 [references/status-evidence.md](references/status-evidence.md)。查詢為唯讀，分開呈現宣告狀態、證據缺口與歸檔資格；不因此執行驗證、修正狀態或搬移文件。
+
+明確查詢可在指定 workspace 內列舉正式 spec 並讀取摘要，再按需追查來源；一般規劃或實作仍只讀目前 spec，不自動啟用盤點。
 
 ## 正式 Spec 歸檔
 

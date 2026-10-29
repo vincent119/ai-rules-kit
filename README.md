@@ -169,7 +169,7 @@ flowchart LR
 
 | Skill ID | 說明 |
 |----------|------|
-| `engineering/agent-development/sdd-skill` | SDD 規劃、任務追蹤與完成規格歸檔；支援專案指定的外部 workspace。 |
+| `engineering/agent-development/sdd-skill` | SDD 規劃、任務追蹤、狀態摘要、完成證據檢查與規格歸檔；支援專案指定的外部 workspace。 |
 | `engineering/agent-development/skill-creator` | Guide for creating effective skills. |
 | `engineering/code-quality/dev-code-reviewer` | 自動化程式碼審查完整流程。 |
 | `engineering/code-quality/dev-refactoring-catalog` | 程式碼重構目錄。 |
