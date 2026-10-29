@@ -1,6 +1,6 @@
 ---
 name: sdd-skill
-description: SDD（Spec Driven Development）工作流程。用於在實作前建立 .specs 下的 requirements.md、design.md、tasks.md，規劃功能邊界、驗收條件、技術設計與實作任務，並在實作過程中依 tasks 追蹤進度。
+description: SDD（Spec Driven Development）工作流程。用於在實作前建立 .specs 下的 requirements.md、design.md、tasks.md，規劃功能邊界、驗收條件、技術設計與實作任務，並追蹤任務進度、評估完成證據及歸檔正式 spec。
 ---
 
 # Spec Driven Development
@@ -12,6 +12,12 @@ description: SDD（Spec Driven Development）工作流程。用於在實作前�
 也適用於功能影響多個檔案、CLI 行為、安裝流程、公開文件、發布流程，或需要先固定 scope、驗收條件與實作順序的變更。
 
 此技能不取代 CI/CD、Deployment、Monitoring、Incident、Postmortem、完整 release automation 或建立其他 skill 的專用技能。
+
+## 專案慣例優先
+
+先讀取適用的 `AGENTS.md`，解析規劃 workspace、任務檔名及既有 owning spec，再建立文件。以下 `.specs/` 與 `tasks.md` 是預設值；專案指定外部 workspace 或 `task.md` 時，所有讀寫、歸檔及引用都使用專案慣例。私有 workspace 不可用時回報缺口，不在公開 repository 建立替代文件。
+
+建立 helper 僅支援目前工作目錄下的預設 `.specs/` 與 `tasks.md`；與專案慣例不符時，直接依模板在正確位置建立，不執行 helper 後再搬移。
 
 ## 工作流程
 
@@ -54,8 +60,8 @@ Draft：
 可用 script 建立空白文件：
 
 ```bash
-node skills/sdd-skill/scripts/create_spec.js spec Feature add-hooks-installer
-node skills/sdd-skill/scripts/create_spec.js draft payment-refund-flow
+node skills/engineering/agent-development/sdd-skill/scripts/create_spec.js spec Feature add-hooks-installer
+node skills/engineering/agent-development/sdd-skill/scripts/create_spec.js draft payment-refund-flow
 ```
 
 ## Draft 規則
@@ -79,7 +85,7 @@ Status: Draft
 Status: Promoted
 ```
 
-Draft 在 `Status: Draft` 時可修改；promotion 後標記 `Status: Promoted`，作為歷史來源不再修改。正式 spec 必須引用來源 draft，並可記錄：
+Draft 在 `Status: Draft` 時可修改；promotion 後標記 `Status: Promoted`，作為歷史來源不再修改；歸檔造成的引用路徑維護除外，不得改寫歷史決策。正式 spec 必須引用來源 draft，並可記錄：
 
 ```text
 Promoted specs
@@ -167,6 +173,12 @@ git diff --check
 若 diff 超出 Boundary，標記 `Blocked` 或更新任務邊界後再繼續。
 
 品質檢查清單放在 `tasks.md` 的驗證任務中，不額外建立 `checklist.md`。
+
+## 正式 Spec 歸檔
+
+使用者要求整理歸檔候選、歸檔已完成 spec 或查閱歸檔歷史時，讀取 [references/archiving.md](references/archiving.md)。歸檔位置為解析後 workspace 的 `archive/{原建立年份}/{原目錄名稱}/`，保留 `Complete` 狀態。一般完成任務不自動搬移。
+
+歸檔請求可在指定範圍列舉正式 spec 並讀取資格摘要，必要時追查驗收證據；這是一般實作讀取限制的特定例外，不預設讀入全部歷史。
 
 ## 樣本參考
 
